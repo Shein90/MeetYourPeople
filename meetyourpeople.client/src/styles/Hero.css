@@ -1,0 +1,32 @@
+.hero {
+  padding: 5rem 1rem;
+  color: black;
+  display: flex;
+  align-items: start;
+  height: 350px;
+  margin-left: 200px;
+}
+
+.hero-content h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  font-weight: bold;
+}
+
+.hero-content h2 {
+  font-weight: 600;
+}
+
+.hero-content h3 {
+  font-weight: 500;
+  margin-top: 40px;
+}
+
+.cta-btn {
+  background-color: black;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  color: white;
+  cursor: pointer;
+  border-radius: 20px;
+}

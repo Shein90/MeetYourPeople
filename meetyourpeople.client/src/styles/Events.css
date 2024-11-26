@@ -1,0 +1,15 @@
+.events {
+  padding: 2rem 1rem;
+  text-align: center;
+}
+
+.event-grid {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(250px, 1fr)
+  ); /* Колонки адаптируются */
+  gap: 20px; /* Отступы между карточками */
+  justify-items: center; /* Центрируем содержимое внутри колонок */
+  padding: 20px;
+}

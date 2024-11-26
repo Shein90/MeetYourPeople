@@ -1,2 +1,32 @@
-body {
+.container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 1rem 2rem;
+  min-height: 50px;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+  font-size: 2rem;
+  font-weight: 800;
+  color: black;
+}
+
+.header nav a {
+  margin: 0 1rem;
+  color: black;
+  font-weight: 600;
+}
+nav {
+  margin-left: auto;
+}
+.sign-in-btn {
+  background-color: black;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  border-radius: 20px;
+  width: 110px;
 }
