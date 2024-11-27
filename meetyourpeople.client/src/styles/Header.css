@@ -22,12 +22,28 @@
 nav {
   margin-left: auto;
 }
+
 .sign-in-btn {
   background-color: black;
   color: white;
   border: none;
+  margin-left: 20px;
   padding: 0.5rem 1rem;
   cursor: pointer;
   border-radius: 20px;
-  width: 110px;
+  width: 70px;
+  text-align: center;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.sign-in-btn:hover {
+  color: whitesmoke;
+  background-color: #444;
+  transform: scale(1.08);
+}
+
+/* Эффект при нажатии */
+.sign-in-btn:active {
+  background-color: #222;
+  transform: scale(1.05);
 }

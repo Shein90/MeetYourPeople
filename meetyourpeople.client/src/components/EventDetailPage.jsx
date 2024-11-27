@@ -1,41 +1,36 @@
 import React, { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom"; // Для получения ID события из URL
+import { useNavigate, useParams } from "react-router-dom";
 import "../styles/EventDetailPage.css";
 
 function EventDetailPage({ events, user }) {
-  const { id } = useParams(); // Получаем ID события из URL
-  const event = events.find((event) => event.id === parseInt(id)); // Ищем событие по ID
-  const [isRegistered, setIsRegistered] = useState(false);
+  const { id } = useParams();
+  const event = events.find((event) => event.id === parseInt(id));
+  const [isJoined, setIsRegistered] = useState(false);
   const navigate = useNavigate();
 
   if (!event) {
-    return <p>Event not found.</p>; // Если событие не найдено
+    return <p>Event not found.</p>;
   }
 
-  // Обработчик для присоединения/покидания события
   const handleJoinLeaveEvent = () => {
     if (!user) {
-      return (
-        <div>
-          <p>You need to be logged in to join the event.</p>
-          <button onClick={() => navigate("/login")}>Go to Login</button>
-        </div>
-      );
+      navigate("/login");
+      return;
+    } else {
+      //Вот тут вероятно надо сделать запрос на сервер
     }
 
-    if (isRegistered) {
+    if (isJoined) {
       setIsRegistered(false);
-      alert("You have left the event.");
     } else {
       setIsRegistered(true);
-      alert("You have joined the event!");
     }
   };
 
   return (
     <div className="event-detail">
       <img src={event.image} alt={event.title} />
-      <div>
+      <div className="description">
         <h1>{event.title}</h1>
         <p>{event.description}</p>
         <p>
@@ -49,7 +44,7 @@ function EventDetailPage({ events, user }) {
           {event.maxParticipants}
         </p>
         <button onClick={handleJoinLeaveEvent}>
-          {isRegistered ? "Leave Event" : "Join Event"}
+          {isJoined ? "Leave Event" : "Join Event"}
         </button>
       </div>
     </div>

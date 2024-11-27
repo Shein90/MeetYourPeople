@@ -1,6 +1,6 @@
 import "../styles/Header.css";
 import { Link } from "react-router-dom";
-function Header() {
+function Header({ user }) {
   return (
     <header className="header">
       <div className="container">
@@ -8,9 +8,16 @@ function Header() {
         <nav>
           <Link to="/">Home</Link>
           <Link to="/events">Events</Link>
-          <Link to="#">Profile</Link>
         </nav>
-        <button className="sign-in-btn">Sign In</button>
+        {user ? (
+          <Link to="/profile" className="sign-in-btn">
+            Profile
+          </Link>
+        ) : (
+          <Link to="/login" className="sign-in-btn">
+            Sign In
+          </Link>
+        )}
       </div>
     </header>
   );
