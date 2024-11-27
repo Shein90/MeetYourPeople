@@ -1,0 +1,43 @@
+.event-detail {
+  display: flex;
+  align-items: flex-start;
+  padding: 20px;
+}
+
+.event-detail img {
+  width: 350px;
+  height: auto;
+  max-height: 330px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-right: 20px;
+}
+
+.event-detail .event-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.event-detail h1 {
+  font-size: 2rem;
+  margin: 10px 0;
+}
+
+.event-detail p {
+  font-size: 1rem;
+  margin: 10px 0;
+}
+
+.event-detail button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  background-color: #ff6347;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.event-detail button:hover {
+  background-color: #e04d3d;
+}

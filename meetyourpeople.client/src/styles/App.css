@@ -2,11 +2,7 @@
   margin: 10px;
   background-color: white;
   color: #000;
-}
-
-.header-con {
-  background-image: url("../assets/back2.jpg");
-  background-size: cover;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 #root {

@@ -1,57 +1,54 @@
-﻿/* Общий стиль для карточки события */
-.event-card {
-  background-color: #ffffff; /* Белый фон */
-  border-radius: 10px; /* Закругленные углы */
-  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.5); /* Легкая тень */
-  overflow: hidden; /* Обрезать содержимое, выходящее за границы */
-  transition: transform 0.2s ease-in-out; /* Анимация при наведении */
-  padding: 5px;
+﻿.event-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.7);
+  transition: transform 0.2s ease-in-out;
+  padding: 10px;
 }
 
 .event-card:hover {
-  transform: scale(1.05); /* Увеличение карточки при наведении */
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Более сильная тень при наведении */
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.9);
 }
 
-/* Изображение в карточке */
 .event-card img {
   width: 100%;
-  height: 100;
+  height: 220px;
   border-bottom: 1px solid #ddd;
-  display: block;
-  margin: 0 auto;
+  object-fit: cover;
   border-radius: 10px;
 }
 
 .event-card h3 {
   font-size: 1.5rem;
   margin: 16px;
-  color: #333;
+  color: black;
 }
 
 .event-card p {
   font-size: 1rem;
   margin: 0 16px 16px;
-  color: #777;
+  color: black;
   line-height: 1.5;
 }
 
-/* Кнопка */
 .event-card button {
-  display: block;
-  width: calc(100% - 32px); /* Ширина кнопки с учетом отступов */
-  margin: 0 auto 16px; /* Центровка кнопки */
+  width: calc(100% - 32px);
+  margin: 0 auto 16px;
   padding: 10px;
-  background-color: #5e295b; /* Основной цвет кнопки */
-  color: #fff; /* Белый текст */
+  background-color: #20081f;
+  color: #fff;
   border: none;
-  border-radius: 25px; /* Закругленные углы */
-  cursor: pointer; /* Указатель мыши */
+  border-radius: 25px;
+  cursor: pointer;
   font-size: 1rem;
   font-weight: bold;
   text-align: center;
 }
 
 .event-card button:hover {
-  background-color: #7c3f7b; /* Изменение цвета при наведении */
+  background-color: #390139;
 }

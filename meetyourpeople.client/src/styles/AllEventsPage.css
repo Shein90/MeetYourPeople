@@ -1,0 +1,19 @@
+.all-events {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.all-events h1 {
+  text-align: center;
+  margin-bottom: 50px;
+  font-size: 2rem;
+  color: #333;
+}
+
+.events-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}

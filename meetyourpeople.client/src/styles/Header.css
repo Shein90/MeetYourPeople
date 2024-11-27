@@ -5,6 +5,7 @@
   padding: 1rem 2rem;
   min-height: 50px;
   background-color: rgba(0, 0, 0, 0.1);
+  background-image: url("../assets/back2.jpg");
 }
 
 .logo {
