@@ -5,15 +5,46 @@
   text-align: center;
 }
 
-.all-events h1 {
-  text-align: center;
-  margin-bottom: 50px;
-  font-size: 2rem;
-  color: #333;
-}
-
 .events-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 20px;
+}
+
+.header-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  margin: 30px;
+}
+
+.header-container h1 {
+  margin: 0;
+  font-size: 2rem;
+  color: #333;
+}
+
+.create-event-btn {
+  padding: 10px 20px;
+  font-size: 1rem;
+  background-color: #30c150;
+  color: white;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  position: absolute;
+  right: 0;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.7);
+}
+
+.create-event-btn:hover {
+  background-color: #3ada8f;
+  transform: scale(1.02);
+}
+
+.create-event-btn:active {
+  transform: scale(0.95);
+  background-color: #48c808;
 }

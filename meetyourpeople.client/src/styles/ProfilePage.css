@@ -68,12 +68,19 @@
   display: flex;
   justify-content: space-between;
   background-color: #29c9d442;
-  margin: 10px;
+  margin-left: 30px;
+  margin-right: 30px;
+  margin-bottom: 15px;
   border-radius: 15px;
   max-width: 500px;
   flex-shrink: 0;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.4);
   text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.event-item:hover {
+  transform: scale(1.05);
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.5);
 }
 
 .event-item h3 {

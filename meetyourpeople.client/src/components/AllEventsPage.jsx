@@ -1,10 +1,21 @@
 import React, { useEffect, useState } from "react";
 import EventCard from "../components/EventCard";
+import { useNavigate } from "react-router-dom";
 import "../styles/AllEventsPage.css";
 
-function AllEventsPage({ outEvents }) {
+function AllEventsPage({ outEvents, user }) {
+  const navigate = useNavigate();
+
   const [events, setEvents] = useState([]); // Состояние для хранения событий
   const [loading, setLoading] = useState(true); // Состояние для отображения загрузки
+
+  const handleCreateEvent = () => {
+    if (user) {
+      navigate("/create-event"); // Переход на страницу создания события
+    } else {
+      navigate("/login"); // Переход на страницу авторизации
+    }
+  };
 
   useEffect(() => {
     // Функция для получения данных с сервера
@@ -29,7 +40,12 @@ function AllEventsPage({ outEvents }) {
 
   return (
     <section className="all-events">
-      <h1>All Events</h1>
+      <div className="header-container">
+        <h1>All Events</h1>
+        <button className="create-event-btn" onClick={handleCreateEvent}>
+          Create Event
+        </button>
+      </div>
       <div className="events-grid">
         {events.map((event, index) => (
           <EventCard key={index} event={event} />

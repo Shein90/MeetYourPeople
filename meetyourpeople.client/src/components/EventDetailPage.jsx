@@ -40,6 +40,9 @@ function EventDetailPage({ events, user }) {
           <strong>Date & Time:</strong> {event.date} at {event.time}
         </p>
         <p>
+          <strong>Address:</strong> {event.address}
+        </p>
+        <p>
           <strong>Registered Participants:</strong> {event.registered} /{" "}
           {event.maxParticipants}
         </p>

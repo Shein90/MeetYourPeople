@@ -8,6 +8,7 @@ import EventDetailPage from "./components/EventDetailPage";
 import Footer from "./components/Footer";
 import LoginPage from "./components/LoginPage";
 import ProfilePage from "./components/ProfilePage";
+import EventCreationPage from "./components/EventCreationPage";
 
 import "./styles/App.css";
 
@@ -32,6 +33,7 @@ function App() {
       time: "14:00",
       registered: 10,
       maxParticipants: 20,
+      address: "addddddd",
     },
     {
       id: 2,
@@ -45,6 +47,7 @@ function App() {
       time: "14:00",
       registered: 10,
       maxParticipants: 20,
+      address: "addddddd",
     },
     {
       id: 3,
@@ -58,6 +61,7 @@ function App() {
       time: "14:00",
       registered: 10,
       maxParticipants: 20,
+      address: "addddddd",
     },
     {
       id: 4,
@@ -71,6 +75,7 @@ function App() {
       time: "14:00",
       registered: 10,
       maxParticipants: 20,
+      address: "addddddd",
     },
     {
       id: 5,
@@ -84,6 +89,7 @@ function App() {
       time: "14:00",
       registered: 10,
       maxParticipants: 20,
+      address: "addddddd",
     },
     {
       id: 6,
@@ -97,6 +103,7 @@ function App() {
       time: "14:00",
       registered: 10,
       maxParticipants: 20,
+      address: "addddddd",
     },
   ];
 
@@ -129,10 +136,11 @@ function App() {
             }
           />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/create-event" element={<EventCreationPage />} />
           <Route path="/profile" element={<ProfilePage user={user} />} />
           <Route
             path="/events"
-            element={<AllEventsPage outEvents={events} />}
+            element={<AllEventsPage outEvents={events} user={user} />}
           />
           <Route
             path="/event/:id"
