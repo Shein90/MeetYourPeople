@@ -8,7 +8,7 @@ function HomePageEvents() {
 
     useEffect(() => {
         getEvents();
-    }, [getEvents]);
+    }, []);
 
     if (!events || events.length === 0) {
         return <p>Loading events...</p>;
