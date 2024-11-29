@@ -1,54 +1,54 @@
 ﻿.event-card {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  background-color: #ffffff;
-  border-radius: 10px;
-  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.7);
-  transition: transform 0.2s ease-in-out;
-  padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.7);
+    transition: transform 0.2s ease-in-out;
+    padding: 10px;
 }
 
-.event-card:hover {
-  transform: scale(1.05);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.9);
-}
+    .event-card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.9);
+    }
 
-.event-card img {
-  width: 100%;
-  height: 220px;
-  border-bottom: 1px solid #ddd;
-  object-fit: cover;
-  border-radius: 10px;
-}
+    .event-card img {
+        width: 100%;
+        height: 220px;
+        border-bottom: 1px solid #ddd;
+        object-fit: cover;
+        border-radius: 10px;
+    }
 
-.event-card h3 {
-  font-size: 1.5rem;
-  margin: 16px;
-  color: black;
-}
+    .event-card h3 {
+        font-size: 1.5rem;
+        margin: 16px;
+        color: black;
+    }
 
-.event-card p {
-  font-size: 1rem;
-  margin: 0 16px 16px;
-  color: black;
-  line-height: 1.5;
-}
+    .event-card p {
+        font-size: 1rem;
+        margin: 0 16px 16px;
+        color: black;
+        line-height: 1.5;
+    }
 
-.event-card button {
-  width: calc(100% - 32px);
-  margin: 0 auto 16px;
-  padding: 10px;
-  background-color: #20081f;
-  color: #fff;
-  border: none;
-  border-radius: 25px;
-  cursor: pointer;
-  font-size: 1rem;
-  font-weight: bold;
-  text-align: center;
-}
+    .event-card button {
+        width: calc(100% - 32px);
+        margin: 0 auto 16px;
+        padding: 10px;
+        background-color: #20081f;
+        color: #fff;
+        border: none;
+        border-radius: 25px;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: bold;
+        text-align: center;
+    }
 
-.event-card button:hover {
-  background-color: #390139;
-}
+        .event-card button:hover {
+            background-color: #390139;
+        }

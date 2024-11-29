@@ -1,49 +1,50 @@
 .container {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  padding: 1rem 2rem;
-  min-height: 50px;
-  background-color: rgba(0, 0, 0, 0.1);
-  background-image: url("../assets/back2.jpg");
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 1rem 2rem;
+    min-height: 50px;
+    background-color: rgba(0, 0, 0, 0.1);
+    background-image: url("../assets/back2.jpg");
 }
 
 .logo {
-  font-size: 2rem;
-  font-weight: 800;
-  color: black;
+    font-size: 2rem;
+    font-weight: 800;
+    color: black;
 }
 
 .header nav a {
-  margin: 0 1rem;
-  color: black;
-  font-weight: 600;
+    margin: 0 1rem;
+    color: black;
+    font-weight: 600;
 }
+
 nav {
-  margin-left: auto;
+    margin-left: auto;
 }
 
 .sign-in-btn {
-  background-color: black;
-  color: white;
-  border: none;
-  margin-left: 20px;
-  padding: 0.5rem 1rem;
-  cursor: pointer;
-  border-radius: 20px;
-  width: 70px;
-  text-align: center;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+    background-color: black;
+    color: white;
+    border: none;
+    margin-left: 20px;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    border-radius: 20px;
+    width: 70px;
+    text-align: center;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-.sign-in-btn:hover {
-  color: whitesmoke;
-  background-color: #444;
-  transform: scale(1.08);
-}
+    .sign-in-btn:hover {
+        color: whitesmoke;
+        background-color: #444;
+        transform: scale(1.08);
+    }
 
-/* Эффект при нажатии */
-.sign-in-btn:active {
-  background-color: #222;
-  transform: scale(1.05);
-}
+    /* Эффект при нажатии */
+    .sign-in-btn:active {
+        background-color: #222;
+        transform: scale(1.05);
+    }
