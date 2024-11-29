@@ -2,6 +2,7 @@
 import EventCard from "../components/EventCard";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
+import { useUser } from "../UserProvider";
 import "../styles/AllEventsPage.css";
 
 AllEventsPage.propTypes = {
@@ -18,16 +19,11 @@ AllEventsPage.propTypes = {
             registered: PropTypes.number.isRequired,
         })
     ).isRequired,
-    user: PropTypes.shape({
-        id: PropTypes.number,
-        firstName: PropTypes.string,
-        lastName: PropTypes.string,
-    }),
 };
 
-function AllEventsPage({ outEvents, user }) {
+function AllEventsPage({ outEvents }) {
     const navigate = useNavigate();
-
+    const { user } = useUser();
     const [events] = useState(outEvents);
     const [loading, setLoading] = useState(true);
 

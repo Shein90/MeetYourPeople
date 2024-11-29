@@ -1,7 +1,8 @@
-import { useState } from "react";
+﻿import { useState, useEffect  } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import PropTypes from "prop-types";
 import "../styles/EventDetailPage.css";
+import { useUser } from "../UserProvider";
 
 EventDetailPage.propTypes = {
     events: PropTypes.arrayOf(
@@ -18,14 +19,11 @@ EventDetailPage.propTypes = {
             maxParticipants: PropTypes.number.isRequired,
         })
     ).isRequired,
-    user: PropTypes.shape({
-        id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-        name: PropTypes.string,
-    }),
 };
 
-function EventDetailPage({ events, user }) {
+function EventDetailPage({ events }) {
     const { id } = useParams();
+    const { user } = useUser();
     const event = events.find((event) => event.id === parseInt(id));
     const [isJoined, setIsRegistered] = useState(false);
     const navigate = useNavigate();
@@ -34,18 +32,33 @@ function EventDetailPage({ events, user }) {
         return <p>Event not found.</p>;
     }
 
+    // Эффект для проверки, зарегистрирован ли пользователь
+    //useEffect(() => {
+    //    // Можно добавить логику для запроса с сервера, чтобы получить информацию, зарегистрирован ли пользователь на событие
+    //    if (user && event) {
+    //        // Пример: fetch для получения статуса участия пользователя
+    //        // fetch(`/api/events/${event.id}/participants`, { headers: { Authorization: `Bearer ${token}` } })
+    //        //     .then((res) => res.json())
+    //        //     .then((data) => setIsRegistered(data.isRegistered))
+    //    }
+    //}, [user, event]);
+
+    // Функция для присоединения/покидания события
     const handleJoinLeaveEvent = () => {
         if (!user) {
             navigate("/login");
             return;
         } else {
-            //Вот тут вероятно надо сделать запрос на сервер
-        }
-
-        if (isJoined) {
-            setIsRegistered(false);
-        } else {
-            setIsRegistered(true);
+            // Пример запроса для присоединения/отмены регистрации
+            // fetch(`/api/events/${event.id}/join`, {
+            //     method: isJoined ? "DELETE" : "POST",
+            //     headers: { Authorization: `Bearer ${user.token}` },
+            // })
+            //     .then((res) => res.json())
+            //     .then((data) => {
+            //         setIsRegistered(!isJoined); // Обновляем статус
+            //     })
+            //     .catch((error) => console.error("Error:", error));
         }
     };
 

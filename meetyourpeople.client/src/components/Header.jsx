@@ -1,15 +1,10 @@
-import "../styles/Header.css";
+﻿import "../styles/Header.css";
 import { Link } from "react-router-dom";
-import PropTypes from "prop-types";
+import { useUser } from "../UserProvider";
 
-Header.propTypes = {
-    user: PropTypes.shape({
-        id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-        name: PropTypes.string,
-    }),
-};
+function Header() {
+    const { user } = useUser();
 
-function Header({ user }) {
     return (
         <header className="header">
             <div className="container">
@@ -18,7 +13,7 @@ function Header({ user }) {
                     <Link to="/">Home</Link>
                     <Link to="/events">Events</Link>
                 </nav>
-                {user ? (
+                {user?.id ? (
                     <Link to="/profile" className="sign-in-btn">
                         Profile
                     </Link>

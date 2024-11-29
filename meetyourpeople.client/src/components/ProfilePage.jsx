@@ -1,38 +1,19 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import PropTypes from 'prop-types';
+import { useUser } from "../hooks/useUser";
 import "../styles/ProfilePage.css";
 
-ProfilePage.propTypes = {
-    user: PropTypes.shape({
-        firstName: PropTypes.string.isRequired,
-        lastName: PropTypes.string.isRequired,
-        dob: PropTypes.string,
-        address: PropTypes.string,
-        events: PropTypes.arrayOf(
-            PropTypes.shape({
-                id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
-                title: PropTypes.string.isRequired,
-                description: PropTypes.string,
-                image: PropTypes.string,
-                date: PropTypes.string,
-            })
-        ),
-    }),
-};
-function ProfilePage({ user }) {
-
+function ProfilePage() {
+    const { user, updateProfile } = useUser(); 
     const [firstName, setFirstName] = useState(user?.firstName || "");
     const [lastName, setLastName] = useState(user?.lastName || "");
     const [dob, setDob] = useState(user?.dob || "");
     const [address, setAddress] = useState(user?.address || "");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    const [events] = useState(user?.events || []);
-
     const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (password !== confirmPassword) {
@@ -40,10 +21,19 @@ function ProfilePage({ user }) {
             return;
         }
 
-        if (!user) {
-            alert("You have been registered!");
-        } else {
-            alert("Profile updated!");
+        try {
+            await updateProfile({
+                firstName,
+                lastName,
+                dob,
+                address,
+                password,
+            });
+
+            alert(user ? "Profile updated!" : "You have been registered!");
+        } catch (error) {
+            console.error("Profile update error:", error);
+            alert("Failed to update profile. Please try again.");
         }
     };
 
@@ -98,11 +88,11 @@ function ProfilePage({ user }) {
             {user && (
                 <div className="events-list">
                     <h3>Your Events</h3>
-                    {events.length > 0 ? (
-                        events.map((event, index) => (
+                    {user.events?.length > 0 ? (
+                        user.events.map((event) => (
                             <div
                                 className="event-item"
-                                key={index}
+                                key={event.id}
                                 onClick={() => handleEventClick(event.id)}
                                 style={{ cursor: "pointer" }}
                             >

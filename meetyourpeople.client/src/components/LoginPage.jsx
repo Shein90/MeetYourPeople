@@ -1,17 +1,25 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { useUser } from "../context/UserProvider";
 import "../styles/LoginPage.css";
 
-function LoginPage() {
-    const [username, setUsername] = useState("");
+function  LoginPage() {
+    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const { login } = useUser();
     const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        alert("Logged in");
-        navigate("/dashboard");
+
+        try {
+            await login(email, password); // Вызываем login из контекста
+            navigate("/"); // Редирект на /dashboard после успешного входа
+        } catch (error) {
+            console.error("Login failed:", error);
+            alert("Invalid credentials or login failed.");
+        }
     };
 
     return (
@@ -21,9 +29,9 @@ function LoginPage() {
                 <form onSubmit={handleSubmit}>
                     <input
                         type="text"
-                        placeholder="Username"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
+                        placeholder="Email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
                         required
                     />
                     <input
