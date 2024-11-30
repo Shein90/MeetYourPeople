@@ -1,22 +1,20 @@
-﻿using Domain.User;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Domain.UserDomain;
 
 namespace Domain.Meeting;
 
-public class Meeting
+public record class Meeting
 {
-    public int Id { get; set; }
-    public DateTime DateTimeTitle { get; set; }
-    public required string Title { get; set; }
-    public required string Description { get; set; }
-    public int MaxParticipants { get; set; } = 10;
+    public int MeetingID { get; init; }
+    public int MeetingOwnerID { get; init; }
+    public int AddressID { get; init; }
+    public DateTime DateTime { get; init; }
+    public required string Title { get; init; }
+    public required string Description { get; init; }
+    public required string DetailedDescription { get; init; }
+    public int MaxParticipants { get; init; }
 
-    public required ApplicationUser MeetingOwner { get; set; }
-    public required Address Address { get; set; }
-    public ICollection<MeetingPhoto> MeetingPhotos { get; set; }
-    public ICollection<MeetingArrangement> MeetingArrangements { get; set; }
+    public required User MeetingOwner { get; init; }
+    public required Address Address { get; init; }
+    public ICollection<MeetingPhoto>? MeetingPhotos { get; init; }
+    public ICollection<MeetingArrangement>? MeetingArrangements { get; init; }
 }

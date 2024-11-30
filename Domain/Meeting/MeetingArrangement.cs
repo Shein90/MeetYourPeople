@@ -1,15 +1,14 @@
-﻿using Domain.User;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Domain.UserDomain;
 
 namespace Domain.Meeting;
 
-public class MeetingArrangement
+public record class MeetingArrangement
 {
-    public int Id { get; set; }
-    public required ApplicationUser User { get; set; }
-    public required Meeting Meeting { get; set; }
+    public int MeetingArrangementID { get; init ; }
+    public int UserID { get; init; }
+    public int MeetingID { get; init; }
+    public UserMeetingRole UserRole { get; init; }        
+
+    public required User User { get; init; }
+    public required Meeting Meeting { get; init; }
 }
