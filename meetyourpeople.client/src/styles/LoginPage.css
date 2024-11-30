@@ -13,7 +13,6 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: white(0, 0, 0, 0.5);
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
@@ -37,8 +36,8 @@
         border: 3px solid #2197e13f;
         border-radius: 5px;
         font-size: 1rem;
-        background-color: #f4f4f4; /* Цвет фона для поля ввода */
-        color: #333; /* Цвет текста */
+        background-color: #f4f4f4; 
+        color: #333;
     }
 
     .login-container button {

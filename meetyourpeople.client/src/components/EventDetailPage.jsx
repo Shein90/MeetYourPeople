@@ -1,65 +1,44 @@
 ﻿import { useState, useEffect  } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import PropTypes from "prop-types";
 import "../styles/EventDetailPage.css";
-import { useUser } from "../UserProvider";
+import { useUser } from "../user/UseUser";
+import { useEvent } from "../event/UseEvent";
 
-EventDetailPage.propTypes = {
-    events: PropTypes.arrayOf(
-        PropTypes.shape({
-            id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-            image: PropTypes.string.isRequired,
-            title: PropTypes.string.isRequired,
-            description: PropTypes.string,
-            fullDescription: PropTypes.string,
-            date: PropTypes.string.isRequired,
-            time: PropTypes.string.isRequired,
-            address: PropTypes.string.isRequired,
-            registered: PropTypes.number.isRequired,
-            maxParticipants: PropTypes.number.isRequired,
-        })
-    ).isRequired,
-};
 
-function EventDetailPage({ events }) {
+function EventDetailPage() {
     const { id } = useParams();
     const { user } = useUser();
-    const event = events.find((event) => event.id === parseInt(id));
-    const [isJoined, setIsRegistered] = useState(false);
+    const { events, joinLeaveEvent } = useEvent();
+    const [isJoined, setIsJoined] = useState(false);
     const navigate = useNavigate();
+
+    const event = events.find((event) => event.id === parseInt(id));
+
+    // Проверка, зарегистрирован ли пользователь на событие
+    useEffect(() => {
+        if (user && event) {
+            // Логика для проверки, зарегистрирован ли пользователь
+            // Пример: запрос на сервер для получения статуса регистрации
+            // Например, мы используем `joinLeaveEvent` для проверки, зарегистрирован ли пользователь
+            setIsJoined(event.registered.includes(user.id)); // Это пример, нужно адаптировать под вашу логику
+        }
+    }, [user, event, events]);
 
     if (!event) {
         return <p>Event not found.</p>;
     }
 
-    // Эффект для проверки, зарегистрирован ли пользователь
-    //useEffect(() => {
-    //    // Можно добавить логику для запроса с сервера, чтобы получить информацию, зарегистрирован ли пользователь на событие
-    //    if (user && event) {
-    //        // Пример: fetch для получения статуса участия пользователя
-    //        // fetch(`/api/events/${event.id}/participants`, { headers: { Authorization: `Bearer ${token}` } })
-    //        //     .then((res) => res.json())
-    //        //     .then((data) => setIsRegistered(data.isRegistered))
-    //    }
-    //}, [user, event]);
-
-    // Функция для присоединения/покидания события
+    // Функция для присоединения или покидания события
     const handleJoinLeaveEvent = () => {
+
         if (!user) {
             navigate("/login");
             return;
-        } else {
-            // Пример запроса для присоединения/отмены регистрации
-            // fetch(`/api/events/${event.id}/join`, {
-            //     method: isJoined ? "DELETE" : "POST",
-            //     headers: { Authorization: `Bearer ${user.token}` },
-            // })
-            //     .then((res) => res.json())
-            //     .then((data) => {
-            //         setIsRegistered(!isJoined); // Обновляем статус
-            //     })
-            //     .catch((error) => console.error("Error:", error));
         }
+
+        // Используем функцию из контекста для присоединения/покидания события
+        joinLeaveEvent(event.id, user.id, isJoined);
+        setIsJoined(!isJoined); // Обновляем локальный статус
     };
 
     return (

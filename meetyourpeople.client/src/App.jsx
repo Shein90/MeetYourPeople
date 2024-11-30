@@ -8,7 +8,7 @@ import Footer from "./components/Footer";
 import LoginPage from "./components/LoginPage";
 import ProfilePage from "./components/ProfilePage";
 import EventCreationPage from "./components/EventCreationPage";
-import { useUser } from "./useUser";
+import { useUser } from "./user/useUser";
 import "./styles/App.css";
 
 function App() {
@@ -24,7 +24,7 @@ function App() {
                         element={
                             <>
                                 <Hero />
-                                <HomePageEvents events={events} />
+                                <HomePageEvents />
                             </>
                         }
                     />
@@ -33,11 +33,11 @@ function App() {
                     <Route path="/profile" element={<ProfilePage />} />
                     <Route
                         path="/events"
-                        element={<AllEventsPage outEvents={events} />}
+                        element={<AllEventsPage />}
                     />
                     <Route
                         path="/event/:id"
-                        element={<EventDetailPage events={events} />}
+                        element={<EventDetailPage />}
                     />
                 </Routes>
                 <Footer />

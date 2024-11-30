@@ -1,24 +1,26 @@
 ﻿import { createContext, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
-UserProvider.propTypes = {
-    children: PropTypes.node.isRequired,
-};
+const initialUserState = [];
 
-const initialUserState = {
-    id: null,
-    email: null,
-    firstName: null,
-    lastName: null,
-    dob: null,
-    address: null,
-    events: [],
+const mockuser = {
+
+    id: 1,
+    username: "john_doe",
+    firstName: "John",
+    lastName: "Doe",
+    dob: "1990-01-01",
+    address: "Sydney",
+    events: [
+        { id: 1, title: "Audi", date: "2024-12-15" },
+        { id: 1, title: "Photography Walk", date: "2024-12-20" },
+    ],
 };
 
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
-    const [user, setUser] = useState(initialUserState);
+    const [user, setUser] = useState(mockuser);
 
     useEffect(() => {
         // Проверяем наличие токена при старте приложения
@@ -134,4 +136,8 @@ export const UserProvider = ({ children }) => {
             {children}
         </UserContext.Provider>
     );
+};
+
+UserProvider.propTypes = {
+    children: PropTypes.node.isRequired,
 };

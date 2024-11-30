@@ -1,6 +1,6 @@
 ﻿import "../styles/Header.css";
 import { Link } from "react-router-dom";
-import { useUser } from "../UserProvider";
+import { useUser } from "../user/UseUser";
 
 function Header() {
     const { user } = useUser();

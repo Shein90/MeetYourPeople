@@ -1,65 +1,79 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import "../styles/EventCreationPage.css";
+import { useEvent } from "../event/UseEvent";
 
 function EventCreationPage() {
-    const [title, setTitle] = useState("");
-    const [description, setDescription] = useState("");
-    const [fullDescription, setFullDescription] = useState("");
-    const [date, setDate] = useState("");
-    const [time, setTime] = useState("");
-    const [address, setAddress] = useState("");
-    const [maxParticipants, setMaxParticipants] = useState("");
-    const [imageFile, setImageFile] = useState(null);
-    const [imagePreview, setImagePreview] = useState(null);
+    const { createEvent } = useEvent();
+    const [form, setForm] = useState({
+        title: "",
+        description: "",
+        fullDescription: "",
+        date: "",
+        time: "",
+        address: "",
+        maxParticipants: "",
+        imageFile: null,
+        imagePreview: null,
+    });
+    const [message, setMessage] = useState(""); // Сообщения для отображения пользователю
+    const [isSubmitting, setIsSubmitting] = useState(false); // Для блокировки кнопки при отправке
 
+
+    // Обработчик изменений для всех полей
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setForm((prevForm) => ({ ...prevForm, [name]: value }));
+    };
+
+    // Обработчик загрузки изображения
     const handleImageUpload = (e) => {
         const file = e.target.files[0];
         if (file) {
-            setImageFile(file);
-            setImagePreview(URL.createObjectURL(file));
+            setForm((prevForm) => ({
+                ...prevForm,
+                imageFile: file,
+                imagePreview: URL.createObjectURL(file),
+            }));
         }
     };
 
-    const handleSubmit = async (e) => {
+    // Валидация формы перед отправкой
+    const validateForm = () => {
+        if (!form.title || !form.date || !form.time || !form.address || !form.maxParticipants) {
+            setMessage("Please fill in all required fields.");
+            return false;
+        }
+        return true;
+    };
+
+    // Обработчик отправки формы
+    const handleSubmit = (e) => {
         e.preventDefault();
 
-        const formData = new FormData();
-        formData.append("title", title);
-        formData.append("description", description);
-        formData.append("fullDescription", fullDescription);
-        formData.append("date", date);
-        formData.append("time", time);
-        formData.append("address", address);
-        formData.append("maxParticipants", maxParticipants);
+        setIsSubmitting(true); // Включаем блокировку кнопки
 
-        if (imageFile) {
-            formData.append("image", imageFile);
+        // Валидация формы
+        if (!validateForm()) {
+            alert("Please check your data!")
+            setIsSubmitting(false); // Отключаем блокировку кнопки
+            return;
         }
 
-        try {
-            const response = await fetch("/your-server-endpoint", {
-                method: "POST",
-                body: formData,
-            });
 
-            if (response.ok) {
-                alert("Event created successfully!");
-            } else {
-                alert("Error creating event.");
-            }
-        } catch (error) {
-            alert("Error creating event: " + error.message);
-        }
+        createEvent(form);  // Вызов функции createEvent из контекста
+        setIsSubmitting(true);
     };
+
     return (
         <div className="event-creation-page">
             <h2>Create Event</h2>
             <form onSubmit={handleSubmit}>
                 <div className="form-container">
+                    {/* Секция изображения */}
                     <div className="image-section">
                         <div className="image-preview">
-                            {imagePreview ? (
-                                <img src={imagePreview} alt="Preview" />
+                            {form.imagePreview ? (
+                                <img src={form.imagePreview} alt="Preview" />
                             ) : (
                                 <p className="placeholder">Image Preview</p>
                             )}
@@ -70,53 +84,64 @@ function EventCreationPage() {
                         <input type="file" id="imageInput" onChange={handleImageUpload} />
                     </div>
 
+                    {/* Секция полей формы */}
                     <div className="fields-section">
                         <input
                             type="text"
+                            name="title"
                             placeholder="Title"
-                            value={title}
-                            onChange={(e) => setTitle(e.target.value)}
+                            value={form.title}
+                            onChange={handleChange}
                         />
                         <textarea
+                            name="description"
                             placeholder="Description"
-                            value={description}
-                            onChange={(e) => setDescription(e.target.value)}
+                            value={form.description}
+                            onChange={handleChange}
                         />
                         <textarea
+                            name="fullDescription"
                             placeholder="Full Description"
-                            value={fullDescription}
-                            onChange={(e) => setFullDescription(e.target.value)}
+                            value={form.fullDescription}
+                            onChange={handleChange}
                         />
                         <input
                             type="date"
-                            value={date}
-                            onChange={(e) => setDate(e.target.value)}
+                            name="date"
+                            value={form.date}
+                            onChange={handleChange}
                         />
                         <input
                             type="time"
-                            value={time}
-                            onChange={(e) => setTime(e.target.value)}
+                            name="time"
+                            value={form.time}
+                            onChange={handleChange}
                         />
                         <input
                             type="text"
+                            name="address"
                             placeholder="Address"
-                            value={address}
-                            onChange={(e) => setAddress(e.target.value)}
+                            value={form.address}
+                            onChange={handleChange}
                         />
                         <input
                             type="number"
+                            name="maxParticipants"
                             placeholder="Max Participants"
-                            value={maxParticipants}
+                            value={form.maxParticipants}
                             min="0"
                             step="1"
-                            onChange={(e) => setMaxParticipants(e.target.value)}
+                            onChange={handleChange}
                         />
-                        <button className="btm" type="submit">
-                            Create Event
+                        <button className="btn" type="submit" disabled={isSubmitting}>
+                            {isSubmitting ? "Creating..." : "Create Event"}
                         </button>
                     </div>
                 </div>
             </form>
+
+            {/* Сообщения об ошибках или успехе */}
+            {message && <p className="message">{message}</p>}
         </div>
     );
 }

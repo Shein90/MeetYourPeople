@@ -1,14 +1,10 @@
 import EventCard from "./EventCard";
-import { useEffect } from "react";
 import "../styles/HomePageEvents.css";
-import { useEvent } from "../hooks/useEvent"; 
+import { useEvent } from "../event/UseEvent";
 
 function HomePageEvents() {
-    const { events, getEvents } = useEvent();
+    const { events } = useEvent();
 
-    useEffect(() => {
-        getEvents();
-    }, []);
 
     if (!events || events.length === 0) {
         return <p>Loading events...</p>;

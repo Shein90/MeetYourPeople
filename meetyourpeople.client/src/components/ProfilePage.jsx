@@ -1,6 +1,6 @@
 ﻿import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useUser } from "../hooks/useUser";
+import { useUser } from "../user/useUser";
 import "../styles/ProfilePage.css";
 
 function ProfilePage() {

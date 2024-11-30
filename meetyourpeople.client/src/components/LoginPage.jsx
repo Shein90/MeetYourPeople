@@ -1,7 +1,7 @@
 ﻿import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { useUser } from "../context/UserProvider";
+import { useUser } from "../user/UseUser";
 import "../styles/LoginPage.css";
 
 function  LoginPage() {

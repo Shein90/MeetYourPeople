@@ -1,31 +1,14 @@
-﻿import { useEffect, useState } from "react";
-import EventCard from "../components/EventCard";
+﻿import EventCard from "../components/EventCard";
 import { useNavigate } from "react-router-dom";
-import PropTypes from "prop-types";
-import { useUser } from "../UserProvider";
+import { useUser } from "../user/UseUser";
+import { useEvent } from "../event/UseEvent";
 import "../styles/AllEventsPage.css";
 
-AllEventsPage.propTypes = {
-    outEvents: PropTypes.arrayOf(
-        PropTypes.shape({
-            id: PropTypes.number.isRequired,
-            title: PropTypes.string.isRequired,
-            description: PropTypes.string.isRequired,
-            image: PropTypes.string.isRequired,
-            date: PropTypes.string.isRequired,
-            time: PropTypes.string.isRequired,
-            address: PropTypes.string.isRequired,
-            maxParticipants: PropTypes.number.isRequired,
-            registered: PropTypes.number.isRequired,
-        })
-    ).isRequired,
-};
-
-function AllEventsPage({ outEvents }) {
+function AllEventsPage() {
     const navigate = useNavigate();
     const { user } = useUser();
-    const [events] = useState(outEvents);
-    const [loading, setLoading] = useState(true);
+    const { events } = useEvent();
+
 
     const handleCreateEvent = () => {
         if (user) {
@@ -34,31 +17,6 @@ function AllEventsPage({ outEvents }) {
             navigate("/login");
         }
     };
-
-    useEffect(() => {
-
-        const fetchEvents = async () => {
-            try {
-                //const response = outEvents;//await fetch('https://api.example.com/events');
-                //const data = await response.json();
-
-                //if (outEvents.length && events.length === 0) {
-                //    setEvents(outEvents);
-                //}
-
-            } catch (error) {
-                console.error("Error", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchEvents();
-    }, [events]);
-
-    if (loading) {
-        return <p>Loading events...</p>;
-    }
 
     return (
         <section className="all-events">
@@ -69,8 +27,8 @@ function AllEventsPage({ outEvents }) {
                 </button>
             </div>
             <div className="events-grid">
-                {events.map((event, index) => (
-                    <EventCard key={index} event={event} />
+                {events.map((event) => (
+                    <EventCard key={event.id} event={event} />
                 ))}
             </div>
         </section>
