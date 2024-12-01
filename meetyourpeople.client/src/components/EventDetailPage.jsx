@@ -20,7 +20,7 @@ function EventDetailPage() {
             // Логика для проверки, зарегистрирован ли пользователь
             // Пример: запрос на сервер для получения статуса регистрации
             // Например, мы используем `joinLeaveEvent` для проверки, зарегистрирован ли пользователь
-            setIsJoined(event.registered.includes(user.id)); // Это пример, нужно адаптировать под вашу логику
+            //setIsJoined(event.registered.includes(user.id)); // Это пример, нужно адаптировать под вашу логику
         }
     }, [user, event, events]);
 
@@ -48,18 +48,18 @@ function EventDetailPage() {
                 <h1>{event.title}</h1>
                 <p>{event.description}</p>
                 <p>
-                    <strong>Full Description:</strong> {event.fullDescription}
+                    <strong>Full Description:</strong> {event.detailedDescription}
                 </p>
                 <p>
-                    <strong>Date & Time:</strong> {event.date} at {event.time}
+                    <strong>Date & Time:</strong> {event.dateTime}
                 </p>
                 <p>
                     <strong>Address:</strong> {event.address}
                 </p>
-                <p>
-                    <strong>Registered Participants:</strong> {event.registered} /{" "}
-                    {event.maxParticipants}
-                </p>
+                {/*<p>*/}
+                {/*    <strong>Registered Participants:</strong> {event.registered} /{" "}*/}
+                {/*    {event.maxParticipants}*/}
+                {/*</p>*/}
                 <button onClick={handleJoinLeaveEvent}>
                     {isJoined ? "Leave Event" : "Join Event"}
                 </button>

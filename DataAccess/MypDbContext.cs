@@ -1,23 +1,12 @@
-﻿using Domain.Meeting;
-using Domain.UserDomain;
-using Microsoft.EntityFrameworkCore;
+﻿namespace DataAccess;
 
-namespace DataAccess;
-
-public class MypDbContext : DbContext
+public class MypDbContext(DbContextOptions<MypDbContext> options) : DbContext(options)
 {
     public DbSet<User>? Users { get; set; }
     public DbSet<Meeting>? Meetings { get; set; }
     public DbSet<MeetingArrangement>? MeetingArrangements { get; set; }
     public DbSet<Address>? Addresses { get; set; }
     public DbSet<MeetingPhoto>? MeetingPhotos { get; set; }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder.UseMySql("Server=localhost;Port=3306;Database=myp_db;User=root;Password=!CSer1990;",
-        new MySqlServerVersion(new Version(8, 0, 37)),
-        options => options.EnableRetryOnFailure());
-    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
