@@ -14,7 +14,6 @@ function EventDetailPage() {
 
     const event = events.find((event) => event.id === parseInt(id));
 
-    // Проверка, зарегистрирован ли пользователь на событие
     useEffect(() => {
         if (user && event) {
             // Логика для проверки, зарегистрирован ли пользователь
@@ -56,10 +55,12 @@ function EventDetailPage() {
                 <p>
                     <strong>Address:</strong> {event.address}
                 </p>
-                {/*<p>*/}
-                {/*    <strong>Registered Participants:</strong> {event.registered} /{" "}*/}
-                {/*    {event.maxParticipants}*/}
-                {/*</p>*/}
+                <p>
+                    <strong>Event owner:</strong> {event.meetingOwnerName}
+                </p>
+                <p>
+                    <strong>Registered Participants:</strong> {event.maxParticipants}
+                </p>
                 <button onClick={handleJoinLeaveEvent}>
                     {isJoined ? "Leave Event" : "Join Event"}
                 </button>

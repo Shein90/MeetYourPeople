@@ -4,8 +4,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 ConfigureServices(builder.Services, builder.Configuration);
 
+builder.Configuration.AddEnvironmentVariables();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+var connectionString = Environment.GetEnvironmentVariable("MYAPP_CONNECTIONSTRING");
 
 var app = builder.Build();
 
@@ -24,12 +27,20 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+app.UseCors("AllowAll");
+
 app.MapFallbackToFile("/index.html");
 
 app.Run();
 
 static void ConfigureServices(IServiceCollection servicesCollection, IConfiguration configuration)
 {
+    servicesCollection.AddCors(options =>
+    {
+        options.AddPolicy("AllowAll", builder =>
+            builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+    });
+
     servicesCollection.AddControllers().AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
@@ -37,8 +48,9 @@ static void ConfigureServices(IServiceCollection servicesCollection, IConfigurat
 
     servicesCollection.AddDbContext<MypDbContext>(options =>
     {
-        var dbSettings = configuration.GetSection(DataBaseAccessSettings.SectionName).Get<DataBaseAccessSettings>();
-        options.UseMySql(dbSettings?.ConnectionString, ServerVersion.AutoDetect(dbSettings?.ConnectionString));
+        var connectionString = Environment.GetEnvironmentVariable("MYAPP_CONNECTIONSTRING");
+        //var dbSettings = configuration.GetSection(DataBaseAccessSettings.SectionName).Get<DataBaseAccessSettings>();
+        options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
     });
         
     servicesCollection.AddScoped<IUserManager, UserManager>();

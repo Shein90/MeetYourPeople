@@ -1,6 +1,4 @@
-﻿using Domain.UserDomain;
-
-namespace Domain.Meeting;
+﻿namespace Domain.Location;
 
 public record class Address
 {

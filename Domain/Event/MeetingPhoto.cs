@@ -1,4 +1,4 @@
-﻿namespace Domain.Meeting;
+﻿namespace Domain.Event;
 
 public record class MeetingPhoto
 {

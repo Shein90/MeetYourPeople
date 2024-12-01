@@ -1,6 +1,4 @@
-﻿using Domain.Meeting;
-
-namespace Domain.UserDomain;
+﻿namespace Domain.UserDomain;
 
 public record class User
 {

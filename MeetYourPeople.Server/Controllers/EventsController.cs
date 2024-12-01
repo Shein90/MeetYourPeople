@@ -1,5 +1,6 @@
-﻿using Domain.Meeting;
+﻿using Domain.Event;
 using Domain.UserDomain;
+using Domain.Location;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MeetYourPeople.Server.Controllers
@@ -11,14 +12,14 @@ namespace MeetYourPeople.Server.Controllers
         private readonly ILogger<EventsController> _logger = logger;
 
         [HttpGet]
-        public IEnumerable<EventDTO> Get()
+        public IEnumerable<EventDto> Get()
         {
-            var testObjects = Enumerable.Range(1, 5).Select(index => new Meeting()
+            var testObjects = Enumerable.Range(1,10).Select(index => new Meeting()
             {
                 MeetingID = index,
                 MeetingOwnerID = index,
                 AddressID = index,
-                DateTime = DateTime.Now.AddDays(5), // Будущая дата для теста
+                DateTime = DateTime.Now.AddDays(5),
                 Title = "Project Kickoff",
                 Description = "Initial project meeting.",
                 DetailedDescription = "This meeting is intended to discuss the initial phases of the project and align goals.",
@@ -45,7 +46,7 @@ namespace MeetYourPeople.Server.Controllers
                 MeetingPhotos = null
             });
 
-            var res = testObjects.Select(meeting => new EventDTO
+            var res = testObjects.Select(meeting => new EventDto
             {
                 Id = meeting.MeetingID,
                 MeetingOwnerID = meeting.MeetingOwnerID,
@@ -54,7 +55,9 @@ namespace MeetYourPeople.Server.Controllers
                 DetailedDescription = meeting.DetailedDescription,
                 DateTime = meeting.DateTime.ToString("dd.MM.yyyy 'at' HH.mm"),
                 Address = meeting.Address.AddressText,
-                MeetingOwnerName = meeting.MeetingOwner.UserName
+                MeetingOwnerName = meeting.MeetingOwner.UserName,
+                MaxParticipants = meeting.MaxParticipants
+
             });
 
             return res.ToArray();

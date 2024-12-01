@@ -4,13 +4,14 @@ import { useUser } from "../user/useUser";
 import "../styles/ProfilePage.css";
 
 function ProfilePage() {
-    const { user, updateProfile } = useUser(); 
-    const [firstName, setFirstName] = useState(user?.firstName || "");
-    const [lastName, setLastName] = useState(user?.lastName || "");
+    const { user, updateProfile, registerProfile } = useUser();
+    const [email, setEmail] = useState(user?.email || "");
+    const [userName, setuserName] = useState(user?.userName || "");
     const [dob, setDob] = useState(user?.dob || "");
     const [address, setAddress] = useState(user?.address || "");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
@@ -21,18 +22,33 @@ function ProfilePage() {
             return;
         }
 
-        try {
-            await updateProfile({
-                firstName,
-                lastName,
-                dob,
-                address,
-                password,
-            });
+        let furtherAction;
+        let resultMessage;
 
-            alert(user ? "Profile updated!" : "You have been registered!");
+        if (user) {
+            furtherAction = updateProfile;
+            resultMessage = "Profile updated!";
+        } else {
+            furtherAction = registerProfile;
+            resultMessage = "You have been registered!"
+        }
+
+        const userData = {
+            email: email,
+            userName: userName,
+            dateOfBirth: dob,
+            address: address,
+            password: password
+        };
+
+        try {
+
+            await furtherAction(userData);
+
+            alert(resultMessage);
+
         } catch (error) {
-            console.error("Profile update error:", error);
+            console.error("Profile page error:", error);
             alert("Failed to update profile. Please try again.");
         }
     };
@@ -48,15 +64,15 @@ function ProfilePage() {
                 <form onSubmit={handleSubmit}>
                     <input
                         type="text"
-                        placeholder="First Name"
-                        value={firstName}
-                        onChange={(e) => setFirstName(e.target.value)}
+                        placeholder="Email/Login"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
                     />
                     <input
                         type="text"
-                        placeholder="Last Name"
-                        value={lastName}
-                        onChange={(e) => setLastName(e.target.value)}
+                        placeholder="User Name"
+                        value={userName}
+                        onChange={(e) => setuserName(e.target.value)}
                     />
                     <input
                         type="date"

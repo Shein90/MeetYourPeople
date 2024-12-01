@@ -1,5 +1,5 @@
-﻿namespace Domain.Meeting;
-public sealed record EventDTO
+﻿namespace Domain.Event;
+public sealed record EventDto
 {
     public int Id { get; set; }
     public int MeetingOwnerID { get; set; }
@@ -9,4 +9,5 @@ public sealed record EventDTO
     public required string DateTime { get; set; }
     public required string Address { get; set; }
     public required string MeetingOwnerName { get; set; }
+    public required int MaxParticipants { get; set; }
 }

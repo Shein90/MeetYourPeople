@@ -1,4 +1,8 @@
-﻿namespace DataAccess;
+﻿using Domain.Event;
+using Domain.Location;
+using Domain.UserDomain;
+
+namespace DataAccess;
 
 public class MypDbContext(DbContextOptions<MypDbContext> options) : DbContext(options)
 {
