@@ -1,7 +1,9 @@
 ﻿using Common.Authentication;
 using DataAccess;
+using DataAccess.DataContext;
 using Domain.Location;
 using Domain.UserDomain;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System.Linq;
@@ -21,29 +23,28 @@ public sealed class UserManager(ILogger<UserManager> logger,
 
     public async Task<AuthResponseDto> RegisterNewUserAsync(UserDto userDto)
     {
-        var existingUser =  _dbContext.Users;//.FirstOrDefaultAsync(u => u.Email == userDto.Email);
+        var existingUser = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == userDto.Email);
 
-        //if (existingUser != null)
-        //{
-        //    throw new Exception("User with this email already exists.");
-        //}
-
-        //var existingUser = _dbContext.Users;
+        if (existingUser != null)
+        {
+            throw new Exception("User with this email already exists.");
+        }
 
         var address = new Address
         {
-           AddressText = userDto.Address
+            AddressText = userDto.Address
         };
 
         await _dbContext.Addresses.AddAsync(address);
         await _dbContext.SaveChangesAsync();
+
 
         var user = new User
         {
             UserName = userDto.UserName,
             Email = userDto.Email,
             DateOfBirth = userDto.DateOfBirth,
-            AddressID = address.Id,
+            AddressId = address.Id,
             Address = address,
             PasswordHash = _passwordService.HashPassword(userDto.Password)
         };
@@ -51,19 +52,12 @@ public sealed class UserManager(ILogger<UserManager> logger,
         await _dbContext.Users.AddAsync(user);
         await _dbContext.SaveChangesAsync();
 
-        var token = _jwtSettings.GenerateJwtToken(userDto);
+        var token = _jwtSettings.GenerateJwtToken(user);
 
         var authResponse = new AuthResponseDto()
         {
             Token = token,
-            User = new UserDto()
-            {
-                Email = user.Email,
-                UserName = user.UserName,
-                DateOfBirth = user.DateOfBirth,
-                Address = user.Address.AddressText,
-                Password = userDto.Password
-            }
+            User = userDto
         };
 
         _logger.LogInformation("Registering new user. Response data: {authResponse}", authResponse);
@@ -71,4 +65,25 @@ public sealed class UserManager(ILogger<UserManager> logger,
         return authResponse;
     }
 
+    public async Task<UserDto> CheckUserAuth(string token)
+    {
+        var principal = _jwtSettings.ValidateJwtToken(token);
+
+        var userIdClaim = principal?.Claims.FirstOrDefault(c => c.Type == "id");
+
+        if (userIdClaim == null)
+        {
+            return null;
+        }
+
+        var user = await _dbContext.Users.FindAsync(userIdClaim.Value);  
+
+        if (user == null)
+        {
+            return null;
+        }
+            
+        return user;
+    }
 }
+

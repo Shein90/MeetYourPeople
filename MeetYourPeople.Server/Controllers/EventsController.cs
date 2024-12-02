@@ -17,7 +17,7 @@ namespace MeetYourPeople.Server.Controllers
             var testObjects = Enumerable.Range(1,10).Select(index => new Meeting()
             {
                 Id = index,
-                AddressID = index,
+                AddressId = index,
                 DateTime = DateTime.Now.AddDays(5),
                 Title = "Project Kickoff",
                 Description = "Initial project meeting.",

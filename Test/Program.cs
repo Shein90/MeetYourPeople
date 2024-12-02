@@ -1,20 +1,23 @@
 ﻿using Common.Authentication;
-using DataAccess.DataContext;
+using Common.Configuration;
+using Common.Services.Abstract;
+using Common.Services;
+using DataAccess.Data;
+using DataAccess.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Options;
 using System.Text.Json;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 ConfigureServices(builder.Services, builder.Configuration);
 
-builder.Configuration.AddEnvironmentVariables();
+builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
-
-app.UseDefaultFiles();
-app.UseStaticFiles();
 
 if (app.Environment.IsDevelopment())
 {
@@ -66,9 +69,20 @@ static void ConfigureServices(IServiceCollection servicesCollection, IConfigurat
         });
 
     servicesCollection.AddDbContext<MypDbContext>(options =>
-    options.UseMySql(
-        configuration.GetConnectionString("ConnectionString"),
-        new MySqlServerVersion(new Version(8, 0, 23))));
+        options.UseMySql(
+            "server=localhost;port=3306;database=myp_db;user=root;password=!CSer1990",
+            new MySqlServerVersion(new Version(8, 0, 23))));
+        //    mysqlOptions =>
+        //    {
+        //        mysqlOptions.EnableRetryOnFailure(
+        //            maxRetryCount: 5,  // Максимальное количество попыток
+        //            maxRetryDelay: TimeSpan.FromSeconds(10),  // Максимальное время ожидания между попытками
+        //            errorNumbersToAdd: null  // Дополнительные коды ошибок, которые следует учитывать
+        //        );
+        //    })
+        //.EnableSensitiveDataLogging()  // Включение логирования чувствительных данных (для отладки)
+        //.EnableDetailedErrors()       // Включение более подробных ошибок
+    //);
 
     servicesCollection.AddScoped<IUserManager, UserManager>();
     servicesCollection.AddScoped<IEventManager, EventManager>();

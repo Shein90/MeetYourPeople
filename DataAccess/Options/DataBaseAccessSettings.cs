@@ -8,7 +8,7 @@
         /// <summary>
         /// Name of section in appsettings.json.
         /// </summary>
-        public const string SectionName = "DataBaseAccess";
+        public const string SectionName = "ConnectionStrings";
 
         [Required(ErrorMessage = "ConnectionString is required.")]
         public string? ConnectionString { get; set; }

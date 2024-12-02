@@ -1,10 +1,10 @@
-﻿namespace Domain.Event;
+﻿namespace DataAccess.Models;
 
-public partial class MeetingArrangement
+public partial class Meetingarrangement
 {
     public int Id { get; set; }
 
-    public UserMeetingRole UserRole { get; set; }
+    public int UserRole { get; set; }
 
     public int UserId { get; set; }
 

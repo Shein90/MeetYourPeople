@@ -23,7 +23,7 @@ public sealed class JwtAuthenticationSettings
     /// <summary>
     /// Provides audiences set in array.
     /// </summary>
-    public string[] Audiences => Audience?.Split(',') ?? Array.Empty<string>();
+    public string[] Audiences => Audience?.Split(',') ?? [];
 
     /// <summary>
     /// Provides issuer.
@@ -76,15 +76,15 @@ public sealed class JwtAuthenticationSettings
         return result;
     }
 
-    public string GenerateJwtToken(UserDto userDto)
+    public string GenerateJwtToken(User userDto)
     {
         var claims = new[]
         {
-                new Claim("id", userDto.UserID.ToString()),
-                new Claim(JwtRegisteredClaimNames.Sub, userDto.UserName),
-                new Claim(JwtRegisteredClaimNames.Email, userDto.Email),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            };
+            new Claim("id", userDto.Id.ToString()),
+            new Claim(JwtRegisteredClaimNames.Sub, userDto.UserName),
+            new Claim(JwtRegisteredClaimNames.Email, userDto.Email),
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+        };
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(SigningKey!));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);

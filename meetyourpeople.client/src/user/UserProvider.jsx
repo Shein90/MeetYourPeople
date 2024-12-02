@@ -23,7 +23,7 @@ export const UserProvider = ({ children }) => {
                 });
                 if (res.ok) {
                     const data = await res.json();
-                    if (isMounted) setUser(data);
+                    if (isMounted) setUser(data.user);
                 } else {
                     throw new Error("Invalid token");
                 }
@@ -79,14 +79,21 @@ export const UserProvider = ({ children }) => {
                 body: JSON.stringify(userData),
             });
 
-            const data = await response.json();
+            if (response.ok) {
 
-            if (response.ok && data.token) {
-                localStorage.setItem("token", data.token);
-                setUser(data.user);
-            } else {
-                throw new Error(data.message || "Registration failed");
+                const data = await response.json();
+
+                if (response.ok && data.token) {
+                    localStorage.setItem("token", data.token);
+                    setUser(data.user);
+                } else {
+                    throw new Error(data.message || "Registration failed");
+                }
             }
+            else {
+                throw new Error(response.statusText);
+            }
+
         } catch (error) {
 
             console.error("Registration error:", error);
