@@ -47,6 +47,7 @@ function ProfilePage() {
 
             alert(resultMessage);
 
+            navigate("/");
         } catch (error) {
             console.error("Profile page error:", error);
             alert("Failed to update profile. Please try again.");

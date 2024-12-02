@@ -3,52 +3,42 @@ import PropTypes from "prop-types";
 
 const initialUserState = null;
 
-//const mockuser = {
-
-//    id: 1,
-//    username: "john_doe",
-//    firstName: "John",
-//    lastName: "Doe",
-//    dob: "1990-01-01",
-//    address: "Sydney",
-//    events: [
-//        { id: 1, title: "Audi", date: "2024-12-15" },
-//        { id: 1, title: "Photography Walk", date: "2024-12-20" },
-//    ],
-//};
-
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
     const [user, setUser] = useState(initialUserState);
 
     useEffect(() => {
-        // Проверяем наличие токена при старте приложения
-        const token = localStorage.getItem("token");
+        let isMounted = true;
 
-        if (token) {
-            // Если токен есть, отправляем запрос на сервер для получения данных пользователя
-            fetch("/api/user", {
-                headers: { Authorization: `Bearer ${token}` },
-            })
-                .then((res) => {
-                    if (!res.ok) {
-                        throw new Error("Invalid token");
-                    }
-                    return res.json();
-                })
-                .then((data) => {
-                    setUser(data);  // Сохраняем данные пользователя
-                })
-                .catch(() => {
-                    // Если ошибка, очищаем токен и сбрасываем пользователя
-                    localStorage.removeItem("token");
-                    setUser(initialUserState);
+        const checkUser = async () => {
+            const token = localStorage.getItem("token");
+            if (!token) {
+                setUser(initialUserState);
+                return;
+            }
+            try {
+                const res = await fetch("/api/user/check-auth", {
+                    headers: { Authorization: `Bearer ${token}` },
                 });
-        } else {
-            // Если нет токена, сбрасываем пользователя
-            setUser(initialUserState);
-        }
+                if (res.ok) {
+                    const data = await res.json();
+                    if (isMounted) setUser(data);
+                } else {
+                    throw new Error("Invalid token");
+                }
+            } catch (error) {
+                console.error(error);
+                localStorage.removeItem("token");
+                if (isMounted) setUser(initialUserState);
+            }
+        };
+
+        checkUser();
+
+        return () => {
+            isMounted = false;
+        };
     }, []);
 
     // Функция логина, отправляет данные на сервер и сохраняет ответ
@@ -93,12 +83,12 @@ export const UserProvider = ({ children }) => {
 
             if (response.ok && data.token) {
                 localStorage.setItem("token", data.token);
-                setUser({ ...data.user, token: data.token });
+                setUser(data.user);
             } else {
                 throw new Error(data.message || "Registration failed");
             }
         } catch (error) {
-          
+
             console.error("Registration error:", error);
             throw error;
         }

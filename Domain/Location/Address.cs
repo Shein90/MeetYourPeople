@@ -2,7 +2,7 @@
 
 public record class Address
 {
-    public int AddressID { get; init; }
+    public int Id { get; init; }
     public required string AddressText { get; init; }
 
     public ICollection<User>? Users { get; init; }
