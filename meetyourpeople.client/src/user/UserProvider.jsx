@@ -18,12 +18,12 @@ export const UserProvider = ({ children }) => {
                 return;
             }
             try {
-                const res = await fetch("/api/user/check-auth", {
+                const res = await fetch("/api/user/me", {
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 if (res.ok) {
-                    const data = await res.json();
-                    if (isMounted) setUser(data.user);
+                    const user = await res.json();
+                    if (isMounted) setUser(user);
                 } else {
                     throw new Error("Invalid token");
                 }
@@ -73,7 +73,7 @@ export const UserProvider = ({ children }) => {
     // Функция для регистрации
     const registerProfile = async (userData) => {
         try {
-            const response = await fetch("/api/user/register", {
+            const response = await fetch("/api/user", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(userData),
@@ -101,7 +101,6 @@ export const UserProvider = ({ children }) => {
         }
     };
 
-    // Новая функция для обновления профиля
     const updateProfile = async (updatedData) => {
         const token = localStorage.getItem("token");
 
@@ -111,7 +110,7 @@ export const UserProvider = ({ children }) => {
         }
 
         try {
-            const res = await fetch("/api/user/update", {
+            const res = await fetch(`/api/user/me`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -119,12 +118,15 @@ export const UserProvider = ({ children }) => {
                 },
                 body: JSON.stringify(updatedData),
             });
+
             if (!res.ok) {
-                throw new Error("Failed to update profile");
+                const error = await res.text();
+                throw new Error(error || "Failed to update user");
             }
-            const data_1 = await res.json();
-            setUser(data_1); // Обновляем состояние пользователя
-            return data_1;
+
+            const data = await res.json();
+            setUser(data.user);
+
         } catch (error) {
             console.error("Update profile error:", error);
             throw error;

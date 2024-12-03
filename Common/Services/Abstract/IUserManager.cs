@@ -8,4 +8,6 @@ public interface IUserManager
     Task<AuthResponseDto> RegisterNewUserAsync(UserDto userDto);
 
     Task<UserDto> CheckUserAuth(string token);
+
+    Task<UserDto> UpdateUserAsync(UserDto userDto);
 }

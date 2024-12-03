@@ -8,6 +8,6 @@ namespace Domain.UserDomain;
 
 public sealed record AuthResponseDto
 {
-    public required string Token { get; init; }
-    public required UserDto User { get; init; }
+    public string Token { get; init; }
+    public UserDto User { get; init; }
 }

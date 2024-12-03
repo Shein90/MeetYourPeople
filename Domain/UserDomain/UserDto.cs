@@ -2,10 +2,10 @@
 
 public sealed record UserDto
 {
-    public int UserID { get; set; }
-    public required string Email { get; set; }
-    public required string UserName { get; set; }
-    public required DateOnly DateOfBirth { get; set; }
-    public required string Address { get; set; }
-    public required string Password { get; set; }
+    public int Id { get; set; }
+    public string Email { get; set; }
+    public string UserName { get; set; }
+    public DateOnly DateOfBirth { get; set; }
+    public string Address { get; set; }
+    public string Password { get; set; }
 }

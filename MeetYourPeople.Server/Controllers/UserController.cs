@@ -1,5 +1,4 @@
-﻿using Common.Authentication;
-using Domain.UserDomain;
+﻿using Domain.UserDomain;
 
 namespace MeetYourPeople.Server.Controllers;
 
@@ -11,51 +10,70 @@ public class UserController(ILogger<UserController> logger,
     private readonly ILogger<UserController> _logger = logger;
     private readonly IUserManager _userManager = userManager;
 
-    [HttpPost("register")]
-    public async Task<IActionResult> Register([FromBody] UserDto userDto)
+    [HttpPost]
+    public async Task<IActionResult> Register([FromBody] UserDto user)
     {
-        if (userDto == null)
-            return BadRequest("User data is required.");
-
-        var response = await _userManager.RegisterNewUserAsync(userDto);
-
-        return Ok(response);
-    }
-
-    [Authorize]
-    [HttpGet("check-auth")]
-    public IActionResult CheckUserAuth()
-    {
-        var token = Request.Headers.Authorization.ToString().Replace("Bearer ", "");
-
-        var user = await _userManager.CheckUserAuth(token);
-
-        return Ok(user);
-    }
-
-
-    // Обновление данных существующего пользователя
-    [HttpPut("update")]
-    [Authorize] // Требует авторизации
-    public IActionResult Update([FromBody] UserDto userDto)
-    {
-        if (userDto == null)
-            return BadRequest("User data is required.");
-
-        // Логика для обновления данных пользователя (например, обновление в БД)
-        _logger.LogInformation("Updating user: {Email}", userDto.Email);
-
-        // Возвращаем обновленные данные пользователя
-        var updatedUser = new
+        try
         {
-            userDto.Email,
-            userDto.UserName,
-            userDto.DateOfBirth,
-            userDto.Address
-        };
+            if (user == null)
+                return BadRequest("User data is required.");
 
-        return Ok(new { user = updatedUser });
+            var response = await _userManager.RegisterNewUserAsync(user);
+
+            _logger.LogInformation("Register user: {user}", user);
+
+            return Ok(response);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Register User ERROR: {Message}", ex.Message);
+
+            return StatusCode(500, ex.Message);
+        }
     }
 
+    [HttpGet("me")]
+    [Authorize]
+    public async Task<IActionResult> CheckUserAuth()
+    {
+        try
+        {
+            var token = Request.Headers.Authorization.ToString().Replace("Bearer ", "");
 
+            var checkedUser = await _userManager.CheckUserAuth(token);
+
+            _logger.LogInformation("Register user: {user}", checkedUser);
+
+            return Ok(checkedUser);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("CheckUserAuth ERROR: {Message}", ex.Message);
+
+            return StatusCode(500, ex.Message);
+        }
+    }
+
+    [HttpPut("me")]
+    [Authorize]
+    public async Task<IActionResult> UpdateUser([FromBody] UserDto user)
+    {
+        try
+        {
+            if (user == null)
+                return BadRequest("User data is required.");
+
+            _logger.LogInformation("Updated user: {Email}", user);
+
+            var updatedUser = await _userManager.UpdateUserAsync(user);
+
+            return Ok(updatedUser);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("CheckUserAuth ERROR: {Message}", ex.Message);
+
+            return StatusCode(500, ex.Message);
+        }
+    }
 }

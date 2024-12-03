@@ -14,8 +14,8 @@ function  LoginPage() {
         e.preventDefault();
 
         try {
-            await login(email, password); // Вызываем login из контекста
-            navigate("/"); // Редирект на /dashboard после успешного входа
+            await login(email, password);
+            navigate("/");
         } catch (error) {
             console.error("Login failed:", error);
             alert("Invalid credentials or login failed.");

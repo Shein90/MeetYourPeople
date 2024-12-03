@@ -12,7 +12,7 @@ namespace Common.Services
     {
         private readonly PasswordHasher<User> _passwordHasher = new();
 
-        public string HashPassword(string password)
+        public string GetHashFromPassword(string password)
         {
             return _passwordHasher.HashPassword(null!, password);
         }

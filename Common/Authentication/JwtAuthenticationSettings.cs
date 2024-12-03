@@ -76,13 +76,13 @@ public sealed class JwtAuthenticationSettings
         return result;
     }
 
-    public string GenerateJwtToken(User userDto)
+    public string GenerateJwtToken(User user)
     {
         var claims = new[]
         {
-            new Claim("id", userDto.Id.ToString()),
-            new Claim(JwtRegisteredClaimNames.Sub, userDto.UserName),
-            new Claim(JwtRegisteredClaimNames.Email, userDto.Email),
+            new Claim("id", user.Id.ToString()),
+            new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
+            new Claim(JwtRegisteredClaimNames.Email, user.Email),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
         };
 

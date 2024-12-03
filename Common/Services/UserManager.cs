@@ -46,7 +46,7 @@ public sealed class UserManager(ILogger<UserManager> logger,
             DateOfBirth = userDto.DateOfBirth,
             AddressId = address.Id,
             Address = address,
-            PasswordHash = _passwordService.HashPassword(userDto.Password)
+            PasswordHash = _passwordService.GetHashFromPassword(userDto.Password)
         };
 
         await _dbContext.Users.AddAsync(user);
@@ -71,19 +71,34 @@ public sealed class UserManager(ILogger<UserManager> logger,
 
         var userIdClaim = principal?.Claims.FirstOrDefault(c => c.Type == "id");
 
-        if (userIdClaim == null)
+        if (int.TryParse(userIdClaim?.Value, out int id))
         {
-            return null;
+            var user = await _dbContext.Users.Include(u => u.Address)
+                                             .FirstOrDefaultAsync(user => user.Id == id);
+
+            if (user == null)
+            {
+                return null!;
+            }
+
+            return new UserDto()
+            {
+                Id = user.Id,
+                UserName = user.UserName,
+                Email = user.Email,
+                Address = user.Address.AddressText,
+                DateOfBirth = user.DateOfBirth
+            };
         }
-
-        var user = await _dbContext.Users.FindAsync(userIdClaim.Value);  
-
-        if (user == null)
+        else
         {
-            return null;
+            return null!;
         }
-            
-        return user;
+    }
+
+    public Task<UserDto> UpdateUserAsync(UserDto userDto)
+    {
+        return Task.FromResult(new UserDto());
     }
 }
 

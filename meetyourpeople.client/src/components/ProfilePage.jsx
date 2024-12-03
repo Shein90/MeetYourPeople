@@ -1,18 +1,27 @@
-﻿import { useState } from "react";
+﻿import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../user/useUser";
 import "../styles/ProfilePage.css";
 
 function ProfilePage() {
     const { user, updateProfile, registerProfile } = useUser();
-    const [email, setEmail] = useState(user?.email || "");
-    const [userName, setuserName] = useState(user?.userName || "");
-    const [dob, setDob] = useState(user?.dob || "");
-    const [address, setAddress] = useState(user?.address || "");
+    const [email, setEmail] = useState("");
+    const [userName, setUserName] = useState("");
+    const [dob, setDob] = useState("");
+    const [address, setAddress] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
 
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (user) {
+            setEmail(user.email);
+            setUserName(user.userName);
+            setDob(user.dateOfBirth);
+            setAddress(user.address)
+        }
+    }, [user]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -24,13 +33,16 @@ function ProfilePage() {
 
         let furtherAction;
         let resultMessage;
+        let navigationRoute;
 
         if (user) {
             furtherAction = updateProfile;
             resultMessage = "Profile updated!";
+            navigationRoute = "/profile"
         } else {
             furtherAction = registerProfile;
             resultMessage = "You have been registered!"
+            navigationRoute = "/"
         }
 
         const userData = {
@@ -47,7 +59,8 @@ function ProfilePage() {
 
             alert(resultMessage);
 
-            navigate("/");
+            navigate(navigationRoute);
+
         } catch (error) {
             console.error("Profile page error:", error);
             alert("Failed to update profile. Please try again.");
@@ -73,7 +86,7 @@ function ProfilePage() {
                         type="text"
                         placeholder="User Name"
                         value={userName}
-                        onChange={(e) => setuserName(e.target.value)}
+                        onChange={(e) => setUserName(e.target.value)}
                     />
                     <input
                         type="date"

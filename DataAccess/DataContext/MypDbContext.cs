@@ -24,7 +24,7 @@ public partial class MypDbContext : DbContext
     public virtual DbSet<User> Users { get; set; }
 
     //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    //    => optionsBuilder.UseMySql("server=localhost;port=3306;database=myp_db;user=root;password=!CSer1990",
+    //    => optionsBuilder.UseMySql("",
     //    Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.37-mysql"));
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
