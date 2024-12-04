@@ -1,7 +1,6 @@
 ﻿import { createContext, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
-
 const initialEventsState = [];
 
 export const EventContext = createContext();
@@ -25,35 +24,27 @@ export const EventProvider = ({ children }) => {
     const createEvent = async (eventData) => {
 
         const formData = new FormData();
+        formData.append("ownerId", parseInt(eventData.ownerId, 10));
         formData.append("title", eventData.title);
         formData.append("description", eventData.description);
-        formData.append("fullDescription", eventData.fullDescription);
+        formData.append("detailedDescription", eventData.detailedDescription);
         formData.append("date", eventData.date);
         formData.append("time", eventData.time);
         formData.append("address", eventData.address);
         formData.append("maxParticipants", eventData.maxParticipants);
+        formData.append("eventImage", eventData.eventImage);
 
-        if (eventData.imageFile) {
-            formData.append("image", eventData.imageFile);
+        const response = await fetch("/api/events", {
+            method: "POST",
+            body: formData,
+        });
+
+        if (!response.ok) {
+            throw new Error("Error creating event");
         }
 
-        try {
-            const response = await fetch("/api/events", {
-                method: "POST",
-                body: formData,
-            });
-
-            if (!response.ok) {
-                throw new Error("Error creating event");
-            }
-
-            const newEvent = await response.json();
-            setEvents((prevEvents) => [...prevEvents, newEvent]);
-            alert("Event created successfully!");
-        } catch (err) {
-
-            alert(`Error creating event: ${err.message}`);
-        }
+        //const newEvent = await response.json();
+        //setEvents((prevEvents) => [...prevEvents, newEvent]);
     };
 
     // Функция для присоединения/покидания события

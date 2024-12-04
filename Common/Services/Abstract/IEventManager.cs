@@ -8,5 +8,5 @@ namespace Common.Services.Abstract;
 /// </summary>
 public interface IEventManager
 {
-    Task<EventDto> CreateEvent(EventDto eventDto);
+    Task CreateEvent(EventDto eventDto);
 }

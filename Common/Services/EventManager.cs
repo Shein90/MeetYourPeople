@@ -10,11 +10,10 @@ public sealed class EventManager(ILogger<EventManager> logger,
     private readonly ILogger<IEventManager> _logger = logger;
     private readonly IWebHostEnvironment _env = env;
 
-    public async Task<EventDto> CreateEvent(EventDto eventDto)
+    public async Task CreateEvent(EventDto eventDto)
     {
         var uploadsFolder = Path.Combine(_env.WebRootPath, "images/events");
 
-        // Убедитесь, что папка существует
         if (!Directory.Exists(uploadsFolder))
         {
             Directory.CreateDirectory(uploadsFolder);
@@ -30,6 +29,6 @@ public sealed class EventManager(ILogger<EventManager> logger,
 
         var fileUrl = $"/images/events/{uniqueFileName}";
 
-        return eventDto.GetEventForFront(fileUrl);
+        var s = eventDto.GetEventForFront(fileUrl);
     }
 }

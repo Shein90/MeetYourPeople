@@ -52,14 +52,24 @@ namespace MeetYourPeople.Server.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateEvent([FromForm] EventDto eventDto)
         {
-            if (!eventDto.EventImage.ContentType.StartsWith("image/"))
+            try
             {
-                return BadRequest("Only image files are allowed.");
+                if (!eventDto.EventImage.ContentType.StartsWith("image/"))
+                {
+                    return BadRequest("Only image files are allowed.");
+                }
+
+                await _eventManager.CreateEvent(eventDto);
+
+                return Ok();
             }
+            catch (Exception ex)
+            {
+                _logger.LogError("Event creation ERROR: {Message}", ex.Message);
 
-            var response = await _eventManager.CreateEvent(eventDto);
-
-            return Ok(response);
+                return StatusCode(500, ex.Message);
+            }
+           
         }
     }
 }
