@@ -16,7 +16,9 @@ public class UserController(ILogger<UserController> logger,
         try
         {
             if (user == null)
+            {
                 return BadRequest("User data is required.");
+            }
 
             var response = await _userManager.RegisterNewUserAsync(user);
 
@@ -27,6 +29,29 @@ public class UserController(ILogger<UserController> logger,
         catch (Exception ex)
         {
             _logger.LogError("Register User ERROR: {Message}", ex.Message);
+
+            return StatusCode(500, ex.Message);
+        }
+    }
+
+    [HttpPost("login")]
+    public async Task<IActionResult> LogIn([FromBody] LoginRequest loginRequest)
+    {
+        try
+        {
+            var response = await _userManager.LogIn(loginRequest);
+
+            _logger.LogInformation("Login user: {user}", response.User);
+
+            return Ok(response);
+        }
+        catch(UnauthorizedAccessException ex)
+        {
+            return Unauthorized(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Login User ERROR: {Message}", ex.Message);
 
             return StatusCode(500, ex.Message);
         }
@@ -61,7 +86,9 @@ public class UserController(ILogger<UserController> logger,
         try
         {
             if (user == null)
+            {
                 return BadRequest("User data is required.");
+            }
 
             _logger.LogInformation("Updated user: {Email}", user);
 

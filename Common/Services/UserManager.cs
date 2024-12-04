@@ -116,5 +116,32 @@ public sealed class UserManager(ILogger<UserManager> logger,
 
         return userDto;
     }
+
+    public async Task<AuthResponseDto> LogIn(LoginRequest loginRequest)
+    {
+        var user = await _dbContext.Users
+                                   .Include(u => u.Address)
+                                   .FirstOrDefaultAsync(u => u.Email == loginRequest.Email)
+                                   ?? throw new UnauthorizedAccessException("User not found!");
+
+        if (!_passwordService.VerifyPassword(user.PasswordHash, loginRequest.Password))
+        {
+            throw new UnauthorizedAccessException("Wrong password!");
+        }
+
+        var token = _jwtSettings.GenerateJwtToken(user);
+
+        var authResponse = new AuthResponseDto()
+        {
+            Token = token,
+            User = UserDto.GetDtoFromUser(user)
+        };
+
+        authResponse.User.Password = loginRequest.Password;
+
+        _logger.LogInformation("Registering new user. Response data: {authResponse}", authResponse);
+
+        return authResponse;
+    }
 }
 

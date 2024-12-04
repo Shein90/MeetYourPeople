@@ -41,26 +41,26 @@ export const UserProvider = ({ children }) => {
         };
     }, []);
 
-    const login = (email, password) => {
-        fetch("/api/login", {
+    const login = async (email, password) => {
+        const res = await fetch("/api/user/login", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email, password }),
-        })
-            .then((res) => res.json())
-            .then((data) => {
-                if (data.token) {
-                    // Если токен получен, сохраняем его и данные пользователя
-                    localStorage.setItem("token", data.token);
-                    setUser({ ...data.user, token: data.token });
-                } else {
-                    // Обработка ошибки
-                    throw new Error(data.message || "Login failed");
-                }
-            })
-            .catch((error) => {
-                console.error("Login error:", error);
-            });
+        });
+
+        if (!res.ok) {
+            const errorData = await res.text();
+            throw new Error(errorData.message);
+        }
+
+        const data = await res.json();
+
+        if (data) {
+            localStorage.setItem("token", data.token);
+            setUser(data.user);
+        } else {
+            throw new Error(data.message || "Login failed");
+        }
     };
 
     const logout = () => {
