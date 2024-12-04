@@ -1,4 +1,4 @@
-﻿namespace Domain.Location;
+﻿namespace Common.DataTransferObjects;
 
 public class AddressDto
 {

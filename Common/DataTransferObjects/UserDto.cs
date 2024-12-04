@@ -1,4 +1,6 @@
-﻿namespace Domain.UserDomain;
+﻿using Domain.UserDomain;
+
+namespace Common.DataTransferObjects;
 
 public sealed record UserDto
 {

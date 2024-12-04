@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { useUser } from "../user/UseUser";
 import "../styles/LoginPage.css";
 
-function  LoginPage() {
+function LoginPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const { login } = useUser();

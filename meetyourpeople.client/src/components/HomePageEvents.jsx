@@ -6,8 +6,12 @@ function HomePageEvents() {
     const { events } = useEvent();
 
 
-    if (!events || events.length === 0) {
+    if (!events) {
         return <p>Loading events...</p>;
+    }
+
+    if (events.length === 0) {
+        return <p>The events have not yet been created.</p>
     }
 
     const shuffledEvents = [...events];

@@ -15,8 +15,8 @@ function EventCreationPage() {
         imageFile: null,
         imagePreview: null,
     });
-    const [message, setMessage] = useState(""); // Сообщения для отображения пользователю
-    const [isSubmitting, setIsSubmitting] = useState(false); // Для блокировки кнопки при отправке
+    const [message, setMessage] = useState(""); 
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
 
     // Обработчик изменений для всех полей

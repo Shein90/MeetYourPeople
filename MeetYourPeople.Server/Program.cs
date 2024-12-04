@@ -21,6 +21,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseStaticFiles();
 
 app.UseHttpsRedirection();
 
@@ -32,6 +33,8 @@ app.MapControllers();
 app.UseCors("AllowAll");
 
 app.MapFallbackToFile("/index.html");
+
+
 
 app.Run();
 

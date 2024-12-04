@@ -1,4 +1,5 @@
 ﻿using Common.Authentication;
+using Common.DataTransferObjects;
 using DataAccess;
 using DataAccess.DataContext;
 using Domain.Location;
@@ -16,7 +17,7 @@ public sealed class UserManager(ILogger<UserManager> logger,
                                 IPasswordService passwordService,
                                 IOptions<JwtAuthenticationSettings> jwtSettings) : IUserManager
 {
-    private readonly ILogger _logger = logger;
+    private readonly ILogger<IUserManager> _logger = logger;
     private readonly MypDbContext _dbContext = db;
     private readonly IPasswordService _passwordService = passwordService;
     private readonly JwtAuthenticationSettings _jwtSettings = jwtSettings.Value;
@@ -78,14 +79,8 @@ public sealed class UserManager(ILogger<UserManager> logger,
             var user = await _dbContext.Users.Include(u => u.Address)
                                              .FirstOrDefaultAsync(user => user.Id == id)
                                              ?? throw new Exception("User not found!");
-            return new UserDto()
-            {
-                Id = user.Id,
-                UserName = user.UserName,
-                Email = user.Email,
-                Address = user.Address.AddressText,
-                DateOfBirth = user.DateOfBirth
-            };
+
+            return UserDto.GetDtoFromUser(user);
         }
         else
         {
@@ -99,7 +94,6 @@ public sealed class UserManager(ILogger<UserManager> logger,
                                    .Include(u => u.Address)
                                    .FirstOrDefaultAsync(u => u.Id == userDto.Id)
                                    ?? throw new Exception("User not found!");
-
 
         user.UserName = userDto.UserName ?? user.UserName;
         user.Email = userDto.Email ?? user.Email;

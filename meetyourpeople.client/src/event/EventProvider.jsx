@@ -1,12 +1,6 @@
 ﻿import { createContext, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
-//import audiImage from "../assets/audi.jpg";
-//import walkImage from "../assets/walk.jpg";
-//import gamesImage from "../assets/games.jpg";
-//import paintballImage from "../assets/paintball.jpg";
-//import coffeeImage from "../assets/coffee.jpg";
-//import metalImage from "../assets/metal.jpg";
 
 const initialEventsState = [];
 
@@ -28,10 +22,6 @@ export const EventProvider = ({ children }) => {
         }
     };
 
-    //const getEvents = () => {
-    //    setEvents(eventsmock); // Сохраняем события в контексте
-    //};
-
     const createEvent = async (eventData) => {
 
         const formData = new FormData();
@@ -42,6 +32,7 @@ export const EventProvider = ({ children }) => {
         formData.append("time", eventData.time);
         formData.append("address", eventData.address);
         formData.append("maxParticipants", eventData.maxParticipants);
+
         if (eventData.imageFile) {
             formData.append("image", eventData.imageFile);
         }

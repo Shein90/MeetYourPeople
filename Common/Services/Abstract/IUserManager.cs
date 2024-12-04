@@ -1,5 +1,5 @@
-﻿using Domain.UserDomain;
-using Microsoft.AspNetCore.Mvc;
+﻿using Common.DataTransferObjects;
+using Domain.UserDomain;
 using System.Threading.Tasks;
 
 namespace Common.Services.Abstract;
