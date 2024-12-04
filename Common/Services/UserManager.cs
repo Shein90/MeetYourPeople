@@ -54,6 +54,8 @@ public sealed class UserManager(ILogger<UserManager> logger,
 
         var token = _jwtSettings.GenerateJwtToken(user);
 
+        userDto.Id = user.Id;
+
         var authResponse = new AuthResponseDto()
         {
             Token = token,
@@ -74,13 +76,8 @@ public sealed class UserManager(ILogger<UserManager> logger,
         if (int.TryParse(userIdClaim?.Value, out int id))
         {
             var user = await _dbContext.Users.Include(u => u.Address)
-                                             .FirstOrDefaultAsync(user => user.Id == id);
-
-            if (user == null)
-            {
-                return null!;
-            }
-
+                                             .FirstOrDefaultAsync(user => user.Id == id)
+                                             ?? throw new Exception("User not found!");
             return new UserDto()
             {
                 Id = user.Id,
@@ -92,13 +89,32 @@ public sealed class UserManager(ILogger<UserManager> logger,
         }
         else
         {
-            return null!;
+            throw new Exception("Incorrect User Id!");
         }
     }
 
-    public Task<UserDto> UpdateUserAsync(UserDto userDto)
+    public async Task<UserDto> UpdateUserAsync(UserDto userDto)
     {
-        return Task.FromResult(new UserDto());
+        var user = await _dbContext.Users
+                                   .Include(u => u.Address)
+                                   .FirstOrDefaultAsync(u => u.Id == userDto.Id)
+                                   ?? throw new Exception("User not found!");
+
+
+        user.UserName = userDto.UserName ?? user.UserName;
+        user.Email = userDto.Email ?? user.Email;
+        user.DateOfBirth = userDto.DateOfBirth == default ? user.DateOfBirth : userDto.DateOfBirth;
+        user.Address.AddressText = userDto.Address;
+
+        if (!_passwordService.VerifyPassword(user.PasswordHash, userDto.Password))
+        {
+            user.PasswordHash = _passwordService.GetHashFromPassword(userDto.Password);
+        }
+
+        _dbContext.Users.Update(user);
+        await _dbContext.SaveChangesAsync();
+
+        return userDto;
     }
 }
 

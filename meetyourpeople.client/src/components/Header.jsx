@@ -1,9 +1,21 @@
 ﻿import "../styles/Header.css";
 import { Link } from "react-router-dom";
 import { useUser } from "../user/UseUser";
+import { useNavigate } from "react-router-dom";
+
 
 function Header() {
-    const { user } = useUser();
+    const { user, logout } = useUser();
+    const navigate = useNavigate();
+
+    const handleLogout = (event) => {
+
+        event.preventDefault();
+
+        logout();
+
+        navigate("/");
+    };
 
     return (
         <header className="header">
@@ -13,14 +25,21 @@ function Header() {
                     <Link to="/">Home</Link>
                     <Link to="/events">Events</Link>
                 </nav>
-                {user?.id ? (
-                    <Link to="/profile" className="sign-in-btn">
-                        Profile
+
+                {location.pathname === "/profile" && user ? (
+                    <Link onClick={handleLogout} className="sign-in-btn">
+                        Logout
                     </Link>
                 ) : (
-                    <Link to="/login" className="sign-in-btn">
-                        Sign In
-                    </Link>
+                    user? (
+                        <Link to="/profile" className="sign-in-btn">
+                            Profile
+                        </Link>
+                    ) : (
+                        <Link to="/login" className="sign-in-btn">
+                            Sign In
+                        </Link>
+                    )
                 )}
             </div>
         </header>

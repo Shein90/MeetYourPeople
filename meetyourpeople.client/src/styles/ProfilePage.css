@@ -15,7 +15,7 @@
     flex: 1;
     margin-right: 120px;
     margin-left: 120px;
-    max-width: 500px;
+    max-width: 400px;
 }
 
     .profile-form input {
@@ -63,7 +63,7 @@
 
     .events-list h3 {
         margin: 10px;
-    }
+}
 
 .event-item {
     display: flex;
@@ -93,7 +93,3 @@
         color: #1000009b;
         margin: 10px;
     }
-
-.profile-form input[type="password"] {
-    background-color: #a0e1e1; /* Цвет, совпадающий с остальными полями */
-}

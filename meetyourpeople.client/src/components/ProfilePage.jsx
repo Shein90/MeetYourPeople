@@ -23,8 +23,14 @@ function ProfilePage() {
         }
     }, [user]);
 
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (!password || !confirmPassword) {
+            alert("Password and confirmation password cannot be empty!");
+            return;
+        }
 
         if (password !== confirmPassword) {
             alert("Passwords do not match!");
@@ -53,6 +59,10 @@ function ProfilePage() {
             password: password
         };
 
+        if (user) {
+            userData.id = user.id;
+        }
+
         try {
 
             await furtherAction(userData);
@@ -74,7 +84,7 @@ function ProfilePage() {
     return (
         <div className="profile-page">
             <div className="profile-form">
-                <h2>{user ? "Profile" : "Register"}</h2>
+                    <h2>{user ? "Profile" : "Register"}</h2>
                 <form onSubmit={handleSubmit}>
                     <input
                         type="text"
@@ -113,6 +123,7 @@ function ProfilePage() {
                     />
                     <button type="submit">{user ? "Save Changes" : "Register"}</button>
                 </form>
+
             </div>
 
             {user && (

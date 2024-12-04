@@ -41,7 +41,6 @@ export const UserProvider = ({ children }) => {
         };
     }, []);
 
-    // Функция логина, отправляет данные на сервер и сохраняет ответ
     const login = (email, password) => {
         fetch("/api/login", {
             method: "POST",
@@ -64,13 +63,11 @@ export const UserProvider = ({ children }) => {
             });
     };
 
-    // Функция для выхода
     const logout = () => {
         localStorage.removeItem("token");
-        setUser(initialUserState);  // Сбрасываем состояние пользователя
+        setUser(initialUserState);
     };
 
-    // Функция для регистрации
     const registerProfile = async (userData) => {
         try {
             const response = await fetch("/api/user", {
@@ -83,7 +80,7 @@ export const UserProvider = ({ children }) => {
 
                 const data = await response.json();
 
-                if (response.ok && data.token) {
+                  if (response.ok && data.token) {
                     localStorage.setItem("token", data.token);
                     setUser(data.user);
                 } else {
@@ -124,8 +121,8 @@ export const UserProvider = ({ children }) => {
                 throw new Error(error || "Failed to update user");
             }
 
-            const data = await res.json();
-            setUser(data.user);
+            const user = await res.json();
+            setUser(user);
 
         } catch (error) {
             console.error("Update profile error:", error);
