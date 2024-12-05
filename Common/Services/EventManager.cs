@@ -134,9 +134,32 @@ public sealed class EventManager(ILogger<EventManager> logger,
         await _dbContext.SaveChangesAsync();
     }
 
+    public async Task DeleteEventAsync(int eventId)
+    {
+        var meeting = await _dbContext.Meetings
+            .FirstOrDefaultAsync(m => m.Id == eventId)
+            ?? throw new Exception($"Meeting not found! MeetingId: {eventId}");
+
+        foreach (var photo in meeting.MeetingPhotos)
+        {
+            var photoFilePath = Path.Combine(_env.WebRootPath, photo.PhotoUrl.TrimStart('/'));
+
+            if (File.Exists(photoFilePath))
+            {
+                File.Delete(photoFilePath);
+            }
+        }
+
+        _dbContext.MeetingArrangements.RemoveRange(meeting.MeetingArrangements);
+        _dbContext.MeetingPhotos.RemoveRange(meeting.MeetingPhotos);
+
+        _dbContext.Meetings.Remove(meeting);
+
+        await _dbContext.SaveChangesAsync();
+    }
+
     private async Task<string> SaveEventPhotoAsync(EventDto eventDto)
     {
-
         var uploadsFolder = Path.Combine(_env.WebRootPath, "images/events");
 
         if (!Directory.Exists(uploadsFolder))
@@ -160,4 +183,6 @@ public sealed class EventManager(ILogger<EventManager> logger,
 
         return $"/images/events/{uniqueFileName}";
     }
+
+
 }

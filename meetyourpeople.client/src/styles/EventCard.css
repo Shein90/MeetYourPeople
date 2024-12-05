@@ -7,6 +7,7 @@
     box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.7);
     transition: transform 0.2s ease-in-out;
     padding: 10px;
+    width: 300px;
 }
 
     .event-card:hover {

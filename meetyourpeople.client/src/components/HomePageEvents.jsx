@@ -1,10 +1,22 @@
-import EventCard from "./EventCard";
+﻿import EventCard from "./EventCard";
 import "../styles/HomePageEvents.css";
 import { useEvent } from "../event/UseEvent";
+import { useState, useEffect } from "react";
 
 function HomePageEvents() {
     const { events } = useEvent();
+    const [shuffledEvents, setShuffledEvents] = useState([]);
 
+    useEffect(() => {
+        if (events.length > 0 && shuffledEvents.length === 0) {
+            const shuffled = [...events];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            setShuffledEvents(shuffled);
+        }
+    }, [events, shuffledEvents]);
 
     if (!events) {
         return <p>Loading events...</p>;
@@ -14,11 +26,6 @@ function HomePageEvents() {
         return <p>The events have not yet been created.</p>
     }
 
-    const shuffledEvents = [...events];
-    for (let i = shuffledEvents.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [shuffledEvents[i], shuffledEvents[j]] = [shuffledEvents[j], shuffledEvents[i]];
-    }
     const selectedEvents = shuffledEvents.slice(0, 6);
 
     return (

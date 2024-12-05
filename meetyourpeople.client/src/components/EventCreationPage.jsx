@@ -61,7 +61,11 @@ function EventCreationPage() {
 
         setIsSubmitting(true);
 
-        const updatedForm = { ...form, ownerId: user.id };
+        const updatedForm = {
+            ...form,
+            ownerId: user.id,
+            ownerName: user.userName
+        };
 
         if (!validateForm()) {
 

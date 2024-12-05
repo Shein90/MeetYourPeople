@@ -12,7 +12,7 @@ public sealed record EventDto
     public required string Time { get; set; }
     public required string Address { get; set; }
     public int MaxParticipants { get; set; }
-    public int? Participants { get; set; }
+    public int Participants { get; set; }
     public IFormFile? EventImage { get; set; }
     public string? EventImageUrl { get; set; }
 }

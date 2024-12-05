@@ -76,7 +76,8 @@ public partial class MypDbContext : DbContext
 
             entity.HasOne(d => d.Meeting).WithMany(p => p.MeetingArrangements)
                 .HasForeignKey(d => d.MeetingId)
-                .HasConstraintName("FK_MeetingArrangements_Meetings_MeetingID");
+                .HasConstraintName("FK_MeetingArrangements_Meetings_MeetingID")
+                .OnDelete(DeleteBehavior.Cascade);
 
             entity.HasOne(d => d.User).WithMany(p => p.MeetingArrangements)
                 .HasForeignKey(d => d.UserId)
@@ -99,7 +100,8 @@ public partial class MypDbContext : DbContext
 
             entity.HasOne(d => d.Meeting).WithMany(p => p.MeetingPhotos)
                 .HasForeignKey(d => d.MeetingId)
-                .HasConstraintName("FK_MeetingPhotos_Meetings_MeetingID");
+                .HasConstraintName("FK_MeetingPhotos_Meetings_MeetingID")
+                .OnDelete(DeleteBehavior.Cascade);
         });
 
         modelBuilder.Entity<User>(entity =>

@@ -9,7 +9,6 @@ function AllEventsPage() {
     const { user } = useUser();
     const { events } = useEvent();
 
-
     const handleCreateEvent = () => {
         if (user) {
             navigate("/create-event");
@@ -26,11 +25,15 @@ function AllEventsPage() {
                     Create Event
                 </button>
             </div>
-            <div className="events-grid">
-                {events.map((event) => (
-                    <EventCard key={event.id} event={event} />
-                ))}
-            </div>
+            {events.length === 0 ? (
+                <p>The events have not yet been created.</p>
+            ) : (
+                <div className="events-grid">
+                    {events.map((event) => (
+                        <EventCard key={event.id} event={event} />
+                    ))}
+                </div>
+            )}
         </section>
     );
 }

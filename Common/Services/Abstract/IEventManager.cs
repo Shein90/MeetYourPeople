@@ -9,4 +9,5 @@ public interface IEventManager
     Task JoinEventAsync(int eventId, int userId);
 
     Task LeaveEventAsync(int eventId, int userId);
+    Task DeleteEventAsync(int eventId);
 }

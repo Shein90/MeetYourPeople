@@ -27,7 +27,7 @@ function ProfilePage() {
         }
 
         if (user && events.length) {
-            const filtered = events.filter(event => user.eventsIds.includes(event.id));
+            const filtered = events.filter(event => user.eventsIds?.includes(event.id));
             setUserEvents(filtered);
         }
 
@@ -66,7 +66,8 @@ function ProfilePage() {
             userName: userName,
             dateOfBirth: dob,
             address: address,
-            password: password
+            password: password,
+            eventsIds: []
         };
 
         if (user) {

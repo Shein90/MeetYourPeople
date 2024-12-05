@@ -4,11 +4,10 @@ import "../styles/EventDetailPage.css";
 import { useUser } from "../user/UseUser";
 import { useEvent } from "../event/UseEvent";
 
-
 function EventDetailPage() {
     const { id } = useParams();
     const { user } = useUser();
-    const { events, joinLeaveEvent } = useEvent();
+    const { events, joinLeaveEvent, deleteEvent } = useEvent();
     const [isJoined, setIsJoined] = useState(false);
     const navigate = useNavigate();
 
@@ -17,7 +16,7 @@ function EventDetailPage() {
     useEffect(() => {
         if (user && event) {
             if (user) {
-                setIsJoined(user.eventsIds.includes(event.id));
+                setIsJoined(user.eventsIds.includes(event?.id));
             }
         }
     }, [user, event]);
@@ -43,6 +42,22 @@ function EventDetailPage() {
         }
     };
 
+    const handleDeleteEvent = async () => {
+
+        if (!user) {
+            throw Error("Unauthorised user cannot delete events!");
+        }
+
+        try {
+            await deleteEvent(event.id);
+
+            navigate("/events");
+        }
+        catch (error) {
+            alert('Error while deleting event:', error)
+        }
+    };
+
     return (
         <div className="event-detail">
             <img src={event.eventImageUrl} alt={event.title} />
@@ -65,10 +80,10 @@ function EventDetailPage() {
                     <strong>Registered Participants:</strong> {event.participants + isJoined}/{event.maxParticipants}
                 </p>
                 <button
-                    onClick={user?.id === event.ownerId ? null : handleJoinLeaveEvent}
-                    disabled={user?.id === event.ownerId || !event}>
+                    className={user?.id === event.ownerId ? 'delete-event' : 'loin-leave'}
+                    onClick={user?.id === event.ownerId ? handleDeleteEvent : handleJoinLeaveEvent}>
                     {user?.id === event.ownerId
-                        ? "You are owner"
+                        ? "Delete event"
                         : isJoined
                             ? "Leave Event"
                             : "Join Event"}

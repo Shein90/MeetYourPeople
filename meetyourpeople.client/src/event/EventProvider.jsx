@@ -22,9 +22,11 @@ export const EventProvider = ({ children }) => {
     };
 
     const createEvent = async (eventData) => {
+        const token = localStorage.getItem('token'); 
 
         const formData = new FormData();
         formData.append("ownerId", parseInt(eventData.ownerId, 10));
+        formData.append("ownerName", eventData.ownerName);
         formData.append("title", eventData.title);
         formData.append("description", eventData.description);
         formData.append("detailedDescription", eventData.detailedDescription);
@@ -32,14 +34,21 @@ export const EventProvider = ({ children }) => {
         formData.append("time", eventData.time);
         formData.append("address", eventData.address);
         formData.append("maxParticipants", eventData.maxParticipants);
+        formData.append("participants", 1);
         formData.append("eventImage", eventData.eventImage);
+        formData.append("eventImageUrl", "");
 
         const response = await fetch("/api/events", {
             method: "POST",
             body: formData,
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
         });
 
-        if (!response.ok) {
+        if (response.ok) {
+            await getEvents();
+        } else {
             throw new Error("Error creating event");
         }
     };
@@ -66,12 +75,33 @@ export const EventProvider = ({ children }) => {
         }
     };
 
+    const deleteEvent = async (eventId) => {
+
+        const token = localStorage.getItem('token');
+
+        const endpoint = `/api/events/${eventId}`;
+
+        const response = await fetch(endpoint, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+        });
+
+        if (response.ok) {
+            await getEvents(); 
+        } else {
+            throw new Error('Failed to delete the event');
+        }
+    };
+
     useEffect(() => {
         getEvents();
     }, []);
 
     return (
-        <EventContext.Provider value={{ events, getEvents, createEvent, joinLeaveEvent }}>
+        <EventContext.Provider value={{ events, getEvents, createEvent, joinLeaveEvent, deleteEvent }}>
             {children}
         </EventContext.Provider>
     );

@@ -107,5 +107,31 @@ namespace MeetYourPeople.Server.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+
+        [HttpDelete("{eventId}")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> DeleteEvent(int eventId)
+        {
+            try
+            {
+                if (eventId == 0)
+                {
+                    return BadRequest("Only image files are allowed.");
+                }
+
+                await _eventManager.DeleteEventAsync(eventId);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Event creation ERROR: {Message}", ex.Message);
+
+                return StatusCode(500, ex.Message);
+            }
+        }
     }
 }
