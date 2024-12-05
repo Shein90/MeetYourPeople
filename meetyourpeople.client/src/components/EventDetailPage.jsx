@@ -1,4 +1,4 @@
-﻿import { useState, useEffect  } from "react";
+﻿import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "../styles/EventDetailPage.css";
 import { useUser } from "../user/UseUser";
@@ -27,22 +27,21 @@ function EventDetailPage() {
         return <p>Event not found.</p>;
     }
 
-    // Функция для присоединения или покидания события
-    const handleJoinLeaveEvent = () => {
+    const handleJoinLeaveEvent = async () => {
 
         if (!user) {
             navigate("/login");
             return;
         }
 
-        // Используем функцию из контекста для присоединения/покидания события
-        joinLeaveEvent(event.id, user.id, isJoined);
-        setIsJoined(!isJoined); // Обновляем локальный статус
+        const isJoined = await joinLeaveEvent(event.id, user.id);
+
+        setIsJoined(isJoined); // Обновляем локальный статус
     };
 
     return (
         <div className="event-detail">
-            <img src={event.image} alt={event.title} />
+            <img src={event.eventImageUrl} alt={event.title} />
             <div className="description">
                 <h1>{event.title}</h1>
                 <p>{event.description}</p>
@@ -50,18 +49,20 @@ function EventDetailPage() {
                     <strong>Full Description:</strong> {event.detailedDescription}
                 </p>
                 <p>
-                    <strong>Date & Time:</strong> {event.dateTime}
+                    <strong>Date & Time:</strong> {event.date} at {event.time}
                 </p>
                 <p>
                     <strong>Address:</strong> {event.address}
                 </p>
                 <p>
-                    <strong>Event owner:</strong> {event.meetingOwnerName}
+                    <strong>Event owner:</strong> {event.ownerName}
                 </p>
                 <p>
-                    <strong>Registered Participants:</strong> {event.maxParticipants}
+                    <strong>Registered Participants:</strong> {event.participants}/{event.maxParticipants}
                 </p>
-                <button onClick={handleJoinLeaveEvent}>
+                <button
+                    onClick={handleJoinLeaveEvent}
+                    disabled={user?.id === event.ownerId}>
                     {isJoined ? "Leave Event" : "Join Event"}
                 </button>
             </div>

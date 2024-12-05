@@ -1,6 +1,4 @@
-﻿
-
-namespace Common.DataTransferObjects;
+﻿namespace Common.DataTransferObjects;
 
 public sealed record AuthResponseDto
 {

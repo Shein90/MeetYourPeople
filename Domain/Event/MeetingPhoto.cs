@@ -1,6 +1,6 @@
 ﻿namespace Domain.Event;
 
-public partial class MeetingPhoto
+public record class MeetingPhoto
 {
     public int Id { get; set; }
     public DateTime UploadDateTime { get; set; }

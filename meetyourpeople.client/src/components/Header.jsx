@@ -28,7 +28,7 @@ function Header() {
 
                 {location.pathname === "/profile" && user ? (
                     <Link onClick={handleLogout} className="sign-in-btn">
-                        Logout
+                        Log out
                     </Link>
                 ) : (
                     user? (

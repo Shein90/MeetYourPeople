@@ -36,10 +36,6 @@ public sealed class UserManager(ILogger<UserManager> logger,
             AddressText = userDto.Address
         };
 
-        await _dbContext.Addresses.AddAsync(address);
-        await _dbContext.SaveChangesAsync();
-
-
         var user = new User
         {
             UserName = userDto.UserName,
@@ -47,7 +43,7 @@ public sealed class UserManager(ILogger<UserManager> logger,
             DateOfBirth = userDto.DateOfBirth,
             AddressId = address.Id,
             Address = address,
-            PasswordHash = _passwordService.GetHashFromPassword(userDto.Password)
+            PasswordHash = _passwordService.GetHashFromPassword(userDto.Password!)
         };
 
         await _dbContext.Users.AddAsync(user);
@@ -92,6 +88,7 @@ public sealed class UserManager(ILogger<UserManager> logger,
     {
         var user = await _dbContext.Users
                                    .Include(u => u.Address)
+                                   .Include(u => u.MeetingArrangements)
                                    .FirstOrDefaultAsync(u => u.Id == userDto.Id)
                                    ?? throw new Exception("User not found!");
 
@@ -100,21 +97,22 @@ public sealed class UserManager(ILogger<UserManager> logger,
         user.DateOfBirth = userDto.DateOfBirth == default ? user.DateOfBirth : userDto.DateOfBirth;
         user.Address.AddressText = userDto.Address;
 
-        if (!_passwordService.VerifyPassword(user.PasswordHash, userDto.Password))
+        if (!_passwordService.VerifyPassword(user.PasswordHash, userDto?.Password ?? string.Empty))
         {
-            user.PasswordHash = _passwordService.GetHashFromPassword(userDto.Password);
+            user.PasswordHash = _passwordService.GetHashFromPassword(userDto?.Password ?? string.Empty);
         }
 
         _dbContext.Users.Update(user);
         await _dbContext.SaveChangesAsync();
 
-        return userDto;
+        return UserDto.GetDtoFromUser(user);
     }
 
     public async Task<AuthResponseDto> LogIn(LoginRequest loginRequest)
     {
         var user = await _dbContext.Users
                                    .Include(u => u.Address)
+                                   .Include(u => u.MeetingArrangements)
                                    .FirstOrDefaultAsync(u => u.Email == loginRequest.Email)
                                    ?? throw new UnauthorizedAccessException("User not found!");
 

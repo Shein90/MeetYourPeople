@@ -9,7 +9,7 @@ function EventCreationPage() {
     const [form, setForm] = useState({
         title: "",
         description: "",
-        fullDescription: "",
+        detailedDescription: "",
         date: "",
         time: "",
         address: "",
@@ -46,6 +46,8 @@ function EventCreationPage() {
             !form.date ||
             !form.time ||
             !form.address ||
+            !form.description ||
+            !form.detailedDescription ||
             !form.maxParticipants ||
             !form.eventImage) {
             alert("Please fill in all required fields.");
@@ -115,9 +117,9 @@ function EventCreationPage() {
                                 onChange={handleChange}
                             />
                             <textarea
-                                name="fullDescription"
+                                name="detailedDescription"
                                 placeholder="Full Description"
-                                value={form.fullDescription}
+                                value={form.detailedDescription}
                                 onChange={handleChange}
                             />
                             <input

@@ -43,7 +43,6 @@ nav {
         transform: scale(1.08);
     }
 
-    /* Эффект при нажатии */
     .sign-in-btn:active {
         background-color: #222;
         transform: scale(1.05);

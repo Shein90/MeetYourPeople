@@ -1,4 +1,6 @@
 ﻿using Common.DataTransferObjects;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Common.Services.Abstract;
@@ -8,5 +10,7 @@ namespace Common.Services.Abstract;
 /// </summary>
 public interface IEventManager
 {
-    Task CreateEvent(EventDto eventDto);
+    Task CreateEventAsync(EventDto eventDto);
+
+    Task<IEnumerable<EventDto>> GetAllEventsAsync();
 }

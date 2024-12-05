@@ -28,7 +28,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\" />
+    <None Include="wwwroot\images\events\2248710c-a5f0-4db3-b31d-7326000d2ddf.jpg" />
+    <None Include="wwwroot\images\events\6c5133c7-b07b-41a5-b011-116292e78df4.jpg" />
+    <None Include="wwwroot\images\events\f6d644c4-0dab-4c74-9880-8f17c439a699.jpg" />
   </ItemGroup>
 
 </Project>

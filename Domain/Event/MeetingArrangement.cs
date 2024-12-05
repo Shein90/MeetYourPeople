@@ -1,6 +1,6 @@
 ﻿namespace Domain.Event;
 
-public partial class MeetingArrangement
+public record class MeetingArrangement
 {
     public int Id { get; set; }
 

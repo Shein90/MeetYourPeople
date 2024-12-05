@@ -47,6 +47,11 @@ export default defineConfig({
                 target,
                 changeOrigin: true,
                 secure: false
+            },
+            '^/images': { // Добавлено правило для изображений
+                target,
+                changeOrigin: true,
+                secure: false
             }
         },
         port: 5173,

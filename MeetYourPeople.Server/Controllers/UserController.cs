@@ -5,6 +5,9 @@ namespace MeetYourPeople.Server.Controllers;
 
 [ApiController]
 [Route("api/user")]
+[ProducesResponseType(StatusCodes.Status200OK)]
+[ProducesResponseType(StatusCodes.Status403Forbidden)]
+[ProducesResponseType(StatusCodes.Status500InternalServerError)]
 public class UserController(ILogger<UserController> logger,
                             IUserManager userManager) : ControllerBase
 {
@@ -36,6 +39,9 @@ public class UserController(ILogger<UserController> logger,
     }
 
     [HttpPost("login")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> LogIn([FromBody] LoginRequest loginRequest)
     {
         try
@@ -60,6 +66,9 @@ public class UserController(ILogger<UserController> logger,
 
     [HttpGet("me")]
     [Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> CheckUserAuth()
     {
         try
@@ -82,6 +91,9 @@ public class UserController(ILogger<UserController> logger,
 
     [HttpPut("me")]
     [Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> UpdateUser([FromBody] UserDto user)
     {
         try

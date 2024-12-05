@@ -42,28 +42,32 @@ export const EventProvider = ({ children }) => {
         if (!response.ok) {
             throw new Error("Error creating event");
         }
-
-        //const newEvent = await response.json();
-        //setEvents((prevEvents) => [...prevEvents, newEvent]);
     };
 
-    // Функция для присоединения/покидания события
-    const joinLeaveEvent = (eventId, userId, isCurrentlyRegistered) => {
-        setEvents((prevEvents) =>
-            prevEvents.map((event) =>
-                event.id === eventId
-                    ? {
-                        ...event,
-                        registered: isCurrentlyRegistered
-                            ? event.registered.filter((id) => id !== userId) // Удаляем пользователя
-                            : [...event.registered, userId], // Добавляем пользователя
-                    }
-                    : event
-            )
-        );
+    const joinLeaveEvent = async (eventId, userId) => {
+        try {
+            const endpoint = `/api/events/${eventId}/toggle`;
+
+            const response = await fetch(endpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ userId })
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to toggle event registration');
+            }
+
+            const isJoined = await response.json(); // Сервер возвращает true (присоединился) или false (покинул)
+            return isJoined; // Возвращаем статус
+        } catch (error) {
+            console.error('Error while toggling event registration:', error);
+            return null; // Возвращаем null в случае ошибки
+        }
     };
 
-    // Получение событий при заходе на главную страницу
     useEffect(() => {
         getEvents();
     }, []);

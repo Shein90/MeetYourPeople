@@ -1,6 +1,6 @@
 ﻿namespace Domain.UserDomain;
 
-public partial class User
+public record class User
 {
     public int Id { get; set; }
     public string UserName { get; set; } = null!;

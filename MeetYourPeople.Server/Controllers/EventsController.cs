@@ -6,6 +6,9 @@ namespace MeetYourPeople.Server.Controllers
 {
     [ApiController]
     [Route("api/events")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public class EventsController(ILogger<EventsController> logger,
                                   IEventManager eventManager) : ControllerBase
     {
@@ -13,53 +16,37 @@ namespace MeetYourPeople.Server.Controllers
         private readonly IEventManager _eventManager = eventManager;
 
         [HttpGet]
-        public IEnumerable<EventDto> Get()
+        public async Task<ActionResult<IEnumerable<EventDto>>> Get()
         {
-            //var testObjects = Enumerable.Range(1, 10).Select(index => new Meeting()
-            //{
-            //    Id = index,
-            //    AddressId = index,
-            //    DateTime = DateTime.Now.AddDays(5),
-            //    Title = "Project Kickoff",
-            //    Description = "Initial project meeting.",
-            //    DetailedDescription = "This meeting is intended to discuss the initial phases of the project and align goals.",
-            //    MaxParticipants = 10,
-            //    Address = new Address
-            //    {
-            //        Id = 1,
-            //        AddressText = "456 Meeting Street"
-            //    },
-            //    MeetingPhotos = null
-            //});
+            try
+            {
+                var events = await _eventManager.GetAllEventsAsync();
 
-            //var res = testObjects.Select(meeting => new EventDto
-            //{
-            //    Id = meeting.Id,
+                return Ok(events);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Event getting ERROR: {Message}", ex.Message);
 
-            //    Title = meeting.Title,
-            //    Description = meeting.Description,
-            //    DetailedDescription = meeting.DetailedDescription,
-            //    DateTime = meeting.DateTime.ToString("dd.MM.yyyy 'at' HH.mm"),
-            //    Address = meeting.Address.AddressText,
-            //    MaxParticipants = meeting.MaxParticipants
-
-            //});
-
-            //return res.ToArray();
-            return [];
+                return StatusCode(500, ex.Message);
+            }
         }
 
         [HttpPost]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> CreateEvent([FromForm] EventDto eventDto)
         {
             try
             {
-                if (!eventDto.EventImage.ContentType.StartsWith("image/"))
+                if (!eventDto.EventImage?.ContentType.StartsWith("image/") ?? false)
                 {
                     return BadRequest("Only image files are allowed.");
                 }
 
-                await _eventManager.CreateEvent(eventDto);
+                await _eventManager.CreateEventAsync(eventDto);
 
                 return Ok();
             }
@@ -69,7 +56,6 @@ namespace MeetYourPeople.Server.Controllers
 
                 return StatusCode(500, ex.Message);
             }
-           
         }
     }
 }

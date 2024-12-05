@@ -15,15 +15,20 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-app.UseDefaultFiles();
-
-app.UseStaticFiles();
-
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseHsts();
 }
+
+app.UseHttpsRedirection();
+app.UseStaticFiles();
+
+app.MapControllers();
+
+app.UseRouting();
+
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
@@ -32,11 +37,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.UseCors("AllowAll");
-
-app.MapFallbackToFile("/index.html");
-
-
+app.MapFallbackToFile("index.html");
 
 app.Run();
 
@@ -49,11 +50,11 @@ static void ConfigureServices(IServiceCollection servicesCollection, IConfigurat
     servicesCollection.AddOptionWithValidation<DataBaseAccessSettings>(
         configuration.GetSection(DataBaseAccessSettings.SectionName));
 
-    servicesCollection.AddCors(options =>
-    {
-        options.AddPolicy("AllowAll", builder =>
-            builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
-    });
+    //servicesCollection.AddCors(options =>
+    //{
+    //    options.AddPolicy("AllowAll", builder =>
+    //        builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+    //});
 
     servicesCollection.AddControllers().AddJsonOptions(options =>
     {

@@ -1,6 +1,6 @@
 ﻿namespace Domain.Location;
 
-public partial class Address
+public record class Address
 {
     public int Id { get; set; }
     public string AddressText { get; set; } = null!;

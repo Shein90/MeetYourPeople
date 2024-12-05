@@ -1,15 +1,19 @@
 ﻿using Domain.UserDomain;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Common.DataTransferObjects;
 
 public sealed record UserDto
 {
     public int Id { get; set; }
-    public string Email { get; set; }
-    public string UserName { get; set; }
-    public DateOnly DateOfBirth { get; set; }
-    public string Address { get; set; }
-    public string Password { get; set; }
+    public required string Email { get; set; }
+    public required string UserName { get; set; }
+    public required DateOnly DateOfBirth { get; set; }
+    public required string Address { get; set; }
+    public string? Password { get; set; }
+    public required ICollection<int> EventsIds { get; set; }
 
     public static UserDto GetDtoFromUser(User user)
     {
@@ -19,7 +23,10 @@ public sealed record UserDto
             Email = user.Email,
             UserName = user.UserName,
             DateOfBirth = user.DateOfBirth,
-            Address = user.Address.AddressText
+            Address = user.Address.AddressText,
+            EventsIds = user.MeetingArrangements
+                .Select(ma => ma.MeetingId)
+                .ToList()
         };
     }
 }
