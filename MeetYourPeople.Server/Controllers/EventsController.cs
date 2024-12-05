@@ -1,6 +1,4 @@
 ﻿using Common.DataTransferObjects;
-using Domain.Event;
-using Domain.Location;
 
 namespace MeetYourPeople.Server.Controllers
 {
@@ -47,6 +45,58 @@ namespace MeetYourPeople.Server.Controllers
                 }
 
                 await _eventManager.CreateEventAsync(eventDto);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Event creation ERROR: {Message}", ex.Message);
+
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpPost("{eventId}/join")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> JoinEvent(int eventId, [FromBody] EventRegistrationRequest userRequest)
+        {
+            try
+            {
+                if (eventId == 0 || userRequest.UserId == 0)
+                {
+                    return BadRequest("Only image files are allowed.");
+                }
+
+                await _eventManager.JoinEventAsync(eventId, userRequest.UserId);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Event creation ERROR: {Message}", ex.Message);
+
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpDelete("{eventId}/leave")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> LeaveEvent(int eventId, [FromBody] EventRegistrationRequest userRequest)
+        {
+            try
+            {
+                if (eventId == 0 || userRequest.UserId == 0)
+                {
+                    return BadRequest("Only image files are allowed.");
+                }
+
+                await _eventManager.LeaveEventAsync(eventId, userRequest.UserId);
 
                 return Ok();
             }

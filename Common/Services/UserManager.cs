@@ -72,8 +72,7 @@ public sealed class UserManager(ILogger<UserManager> logger,
 
         if (int.TryParse(userIdClaim?.Value, out int id))
         {
-            var user = await _dbContext.Users.Include(u => u.Address)
-                                             .FirstOrDefaultAsync(user => user.Id == id)
+            var user = await _dbContext.Users.FirstOrDefaultAsync(user => user.Id == id)
                                              ?? throw new Exception("User not found!");
 
             return UserDto.GetDtoFromUser(user);
@@ -86,10 +85,7 @@ public sealed class UserManager(ILogger<UserManager> logger,
 
     public async Task<UserDto> UpdateUserAsync(UserDto userDto)
     {
-        var user = await _dbContext.Users
-                                   .Include(u => u.Address)
-                                   .Include(u => u.MeetingArrangements)
-                                   .FirstOrDefaultAsync(u => u.Id == userDto.Id)
+        var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == userDto.Id)
                                    ?? throw new Exception("User not found!");
 
         user.UserName = userDto.UserName ?? user.UserName;
@@ -110,10 +106,7 @@ public sealed class UserManager(ILogger<UserManager> logger,
 
     public async Task<AuthResponseDto> LogIn(LoginRequest loginRequest)
     {
-        var user = await _dbContext.Users
-                                   .Include(u => u.Address)
-                                   .Include(u => u.MeetingArrangements)
-                                   .FirstOrDefaultAsync(u => u.Email == loginRequest.Email)
+        var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == loginRequest.Email)
                                    ?? throw new UnauthorizedAccessException("User not found!");
 
         if (!_passwordService.VerifyPassword(user.PasswordHash, loginRequest.Password))

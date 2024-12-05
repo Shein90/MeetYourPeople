@@ -1,9 +1,4 @@
-﻿using Domain.UserDomain;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace Common.DataTransferObjects;
+﻿namespace Common.DataTransferObjects;
 
 public sealed record UserDto
 {
@@ -13,7 +8,7 @@ public sealed record UserDto
     public required DateOnly DateOfBirth { get; set; }
     public required string Address { get; set; }
     public string? Password { get; set; }
-    public required ICollection<int> EventsIds { get; set; }
+    public required ICollection<int> EventsIds { get; set; } = [];
 
     public static UserDto GetDtoFromUser(User user)
     {

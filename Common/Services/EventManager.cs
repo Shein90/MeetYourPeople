@@ -66,10 +66,6 @@ public sealed class EventManager(ILogger<EventManager> logger,
     public async Task<IEnumerable<EventDto>> GetAllEventsAsync()
     {
         var allMeetings = await _dbContext.Meetings
-            .Include(m => m.MeetingPhotos)
-            .Include(m => m.MeetingArrangements)
-                .ThenInclude(ma => ma.User)
-            .Include(m => m.Address)
             .AsNoTracking()
             .ToListAsync();
 
@@ -93,6 +89,49 @@ public sealed class EventManager(ILogger<EventManager> logger,
         });
 
         return events;
+    }
+
+    public async Task JoinEventAsync(int eventId, int userId)
+    {
+        var meeting = await _dbContext.Meetings
+            .FirstOrDefaultAsync(m => m.Id == eventId) 
+            ?? throw new Exception($"Meeting not found! MeetingId: {eventId}");
+
+        var user = await _dbContext.Users
+            .FirstOrDefaultAsync(u => u.Id == userId)
+            ?? throw new Exception($"User not found! UserId: {userId}");
+
+        if (meeting.MeetingArrangements.Any(ma => ma.UserId == userId))
+        {
+            throw new InvalidOperationException($"User already registered: {userId}");
+        }
+
+        var meetingArrangement = new MeetingArrangement()
+        {
+            UserId = user.Id,
+            MeetingId = meeting.Id,
+            UserRole = UserMeetingRole.Participant
+        };
+
+        await _dbContext.MeetingArrangements.AddAsync(meetingArrangement);
+
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task LeaveEventAsync(int eventId, int userId)
+    {
+        var meetingArrangement = await _dbContext.MeetingArrangements
+            .FirstOrDefaultAsync(ma => ma.MeetingId == eventId && ma.UserId == userId)
+            ?? throw new Exception("User not found!");
+
+        if (meetingArrangement.UserRole == UserMeetingRole.Owner)
+        {
+            throw new InvalidOperationException("Owner cannot leave the event. Transfer ownership first.");
+        }
+
+        _dbContext.MeetingArrangements.Remove(meetingArrangement);
+
+        await _dbContext.SaveChangesAsync();
     }
 
     private async Task<string> SaveEventPhotoAsync(EventDto eventDto)

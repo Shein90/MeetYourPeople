@@ -16,12 +16,11 @@ function EventDetailPage() {
 
     useEffect(() => {
         if (user && event) {
-            // Логика для проверки, зарегистрирован ли пользователь
-            // Пример: запрос на сервер для получения статуса регистрации
-            // Например, мы используем `joinLeaveEvent` для проверки, зарегистрирован ли пользователь
-            //setIsJoined(event.registered.includes(user.id)); // Это пример, нужно адаптировать под вашу логику
+            if (user) {
+                setIsJoined(user.eventsIds.includes(event.id));
+            }
         }
-    }, [user, event, events]);
+    }, [user, event]);
 
     if (!event) {
         return <p>Event not found.</p>;
@@ -34,9 +33,14 @@ function EventDetailPage() {
             return;
         }
 
-        const isJoined = await joinLeaveEvent(event.id, user.id);
+        try {
+            await joinLeaveEvent(event.id, user.id, isJoined);
 
-        setIsJoined(isJoined); // Обновляем локальный статус
+            setIsJoined(!isJoined);
+        }
+        catch (error) {
+            alert('Error while handling event registration:', error)
+        }
     };
 
     return (
@@ -58,12 +62,16 @@ function EventDetailPage() {
                     <strong>Event owner:</strong> {event.ownerName}
                 </p>
                 <p>
-                    <strong>Registered Participants:</strong> {event.participants}/{event.maxParticipants}
+                    <strong>Registered Participants:</strong> {event.participants + isJoined}/{event.maxParticipants}
                 </p>
                 <button
-                    onClick={handleJoinLeaveEvent}
-                    disabled={user?.id === event.ownerId}>
-                    {isJoined ? "Leave Event" : "Join Event"}
+                    onClick={user?.id === event.ownerId ? null : handleJoinLeaveEvent}
+                    disabled={user?.id === event.ownerId || !event}>
+                    {user?.id === event.ownerId
+                        ? "You are owner"
+                        : isJoined
+                            ? "Leave Event"
+                            : "Join Event"}
                 </button>
             </div>
         </div>

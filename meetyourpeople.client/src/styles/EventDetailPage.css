@@ -1,4 +1,4 @@
-.event-detail {
+﻿.event-detail {
     display: flex;
     align-items: flex-start;
     padding: 20px;
@@ -20,7 +20,7 @@
     object-fit: cover;
     border-radius: 10px;
     margin-right: 20px;
-    margin-top:70px;
+    margin-top: 70px;
 }
 
 .event-detail h1 {
@@ -56,4 +56,9 @@
     .event-detail button:active {
         transform: scale(0.95);
         background-color: #48c808;
+    }
+
+    .event-detail button:disabled {
+        pointer-events: none;
+        opacity: 0.6;
     }

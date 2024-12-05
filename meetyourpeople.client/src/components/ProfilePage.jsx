@@ -1,27 +1,37 @@
 ﻿import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../user/useUser";
+import { useEvent } from "../event/UseEvent";
 import "../styles/ProfilePage.css";
 
 function ProfilePage() {
     const { user, updateProfile, registerProfile } = useUser();
+    const { events } = useEvent();
     const [email, setEmail] = useState("");
     const [userName, setUserName] = useState("");
     const [dob, setDob] = useState("");
     const [address, setAddress] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    const [userEvents, setUserEvents] = useState([]);
 
     const navigate = useNavigate();
 
     useEffect(() => {
+
         if (user) {
             setEmail(user.email);
             setUserName(user.userName);
             setDob(user.dateOfBirth);
             setAddress(user.address)
         }
-    }, [user]);
+
+        if (user && events.length) {
+            const filtered = events.filter(event => user.eventsIds.includes(event.id));
+            setUserEvents(filtered);
+        }
+
+    }, [user, events]);
 
 
     const handleSubmit = async (e) => {
@@ -84,7 +94,7 @@ function ProfilePage() {
     return (
         <div className="profile-page">
             <div className="profile-form">
-                    <h2>{user ? "Profile" : "Register"}</h2>
+                <h2>{user ? "Profile" : "Register"}</h2>
                 <form onSubmit={handleSubmit}>
                     <input
                         type="text"
@@ -129,8 +139,8 @@ function ProfilePage() {
             {user && (
                 <div className="events-list">
                     <h3>Your Events</h3>
-                    {user.events?.length > 0 ? (
-                        user.events.map((event) => (
+                    {userEvents.length > 0 ? (
+                        userEvents.map(event => (
                             <div
                                 className="event-item"
                                 key={event.id}

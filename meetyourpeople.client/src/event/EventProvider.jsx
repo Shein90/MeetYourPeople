@@ -44,27 +44,25 @@ export const EventProvider = ({ children }) => {
         }
     };
 
-    const joinLeaveEvent = async (eventId, userId) => {
-        try {
-            const endpoint = `/api/events/${eventId}/toggle`;
+    const joinLeaveEvent = async (eventId, userId, isJoined) => {
 
-            const response = await fetch(endpoint, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ userId })
-            });
+        const token = localStorage.getItem('token'); 
 
-            if (!response.ok) {
-                throw new Error('Failed to toggle event registration');
-            }
+        const endpoint = isJoined
+            ? `/api/events/${eventId}/leave`
+            : `/api/events/${eventId}/join`;
 
-            const isJoined = await response.json(); // Сервер возвращает true (присоединился) или false (покинул)
-            return isJoined; // Возвращаем статус
-        } catch (error) {
-            console.error('Error while toggling event registration:', error);
-            return null; // Возвращаем null в случае ошибки
+        const response = await fetch(endpoint, {
+            method: isJoined ? 'DELETE' : 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ userId: userId }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to join or leave the event');
         }
     };
 

@@ -1,6 +1,6 @@
-﻿namespace Domain.UserDomain;
+﻿namespace Common.DataTransferObjects;
 
-public class LoginRequest
+public sealed record LoginRequest
 {
     public required string Email { get; set; }
     public required string Password { get; set; }

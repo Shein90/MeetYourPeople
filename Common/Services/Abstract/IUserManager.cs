@@ -1,5 +1,4 @@
 ﻿using Common.DataTransferObjects;
-using Domain.UserDomain;
 using System.Threading.Tasks;
 
 namespace Common.Services.Abstract;

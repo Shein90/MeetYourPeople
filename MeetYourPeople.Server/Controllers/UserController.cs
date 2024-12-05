@@ -1,5 +1,4 @@
 ﻿using Common.DataTransferObjects;
-using Domain.UserDomain;
 
 namespace MeetYourPeople.Server.Controllers;
 
